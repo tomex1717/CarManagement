@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{css/home.css}">
+
+    <title>Car Management Alfa Serwis</title>
+</head>
+<body>
+<nav class="navbar navbar-dark fixed-top bg-primary flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Alfa Serwis</a>
+    <input type="text" class="form-control form-control-primary w-100" placeholder="Szukaj...">
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+
+<div class="container-fluid">
+
+    <!--    NavBar Section-->
+
+    <div class="row">
+        <div class="col-md-2 bg-light d-none d-md-block sidebar">
+            <div class="left-sidebar">
+                <ul class="nav flex-column sidebar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20"
+                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                            Car Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20"
+                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                            GPS Tracking
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20"
+                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                            Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg class="bi bi-chevron-right" width="16" height="16" viewBox="0 0 20 20"
+                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M6.646 3.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L12.293 10 6.646 4.354a.5.5 0 010-.708z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                            Invoices
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <form class="well form-horizontal" th:action="@{/savecar}" method="post" id="contact_form" th:object="${car}">
+            <fieldset>
+
+                <!-- Form Name -->
+                <legend class="reg-number-title " th:text="${car.getRegNumber()}"></legend>
+
+                <!-- Text input-->
+                <h3>Postawowe dane</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Number Rejestracyjny</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Number Rejestracyjny" class="form-control"
+                                       type="text" th:field="*{regNumber}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Marka</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Marka" class="form-control" type="text"
+                                       th:field="*{mark}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Model</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Model" class="form-control" type="text"
+                                       th:field="*{model}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Ksywka</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Ksywka" class="form-control" type="text"
+                                       th:field="*{nickname}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Miasto</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Miasto" class="form-control" type="text"
+                                       th:field="*{city}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Użytkownik</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Użytkownik" class="form-control" type="text"
+                                       th:field="*{user}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Kolor</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Kolor" class="form-control" type="text"
+                                       th:field="*{color}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Data pierwszej rejestracji</label>
+                        <div class="col-md-auto input-group date" id="firstRegDate">
+                            <div class="input-group" >
+
+                                <input name="first_name" placeholder="YYYY-MM-DD" class="form-control" type="date"
+                                       th:field="*{firstRegDate}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-auto control-label"></label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="true" id="vat1" th:field="*{VAT_1}">
+                                <label class="form-check-label" for="vat1">
+                                    Vat 1
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <hr>
+                <h3>Paliwo</h3>
+                <div class="row">
+                    <!-- Select Basic -->
+
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Rodzaj Paliwa</label>
+                        <div class="col-md-auto selectContainer">
+                            <div class="input-group">
+                                <select name="Rodzaj paliwa" class="form-control selectpicker"
+                                        th:field="*{fuelType}">
+                                    <option value="Benzyna">Benzyna</option>
+                                    <option value="Benzyna+LPG">Benzyna+LPG</option>
+                                    <option value="Diesel">Diesel</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Ważność karty paliwowej</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="YYYY-MM-DD" class="form-control" type="date"
+                                       th:field="*{fuelCardExpire}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <h3>Przegląd</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Data przegladu</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="YYYY-MM-DD" class="form-control" type="date"
+                                       th:field="*{overviewDate}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Przegieg przy przeglądzie</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Przegieg przy przeglądzie"
+                                       class="form-control" type="text" th:field="*{overviewDate}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+                <h3>Olej</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Data wymiany oleju</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="YYYY-MM-DD" class="form-control" type="date"
+                                       th:field="*{oilDate}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Przegieg wymianie oleju</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Przegieg przy przeglądzie"
+                                       class="form-control" type="text" th:field="*{oilMillage}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h3>Gaz</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Data przegladu gazu</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Data przegladu gazu" class="form-control" type="date"
+                                       th:field="*{gasOverviewDate}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Przegieg przy przeglądzie gazu</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder=">Przegieg przy przeglądzie gazu"
+                                       class="form-control" type="text" th:field="*{gasOverviewMillage}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Ważność butli</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder=">Przegieg przy przeglądzie gazu"
+                                       class="form-control" type="date" th:field="*{gasCylinderExpire}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+
+                <h3>Ubezpieczenie</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Ubezpieczyciel</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Ubezpieczyciel" class="form-control" type="text"
+                                       th:field="*{insurer}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">OC data</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="YYYY-MM-DD"
+                                       class="form-control" type="date" th:field="*{ocDate}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">OC Firma</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="OC Firma" class="form-control" type="text"
+                                       th:field="*{ocCompany}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">AC Firma</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="AC firma"
+                                       class="form-control" type="text" th:field="*{acCompany}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Assistant</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Assistant"
+                                       class="form-control" type="text" th:field="*{assistant}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <h3>Opony</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Letnie rozmiar</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Letnie rozmiar" class="form-control" type="text"
+                                       th:field="*{summerTiresSize}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Zimowe rozmiar</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Zimowe rozmiar"
+                                       class="form-control" type="text" th:field="*{winterTiresSize}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Lokalizacja opon</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Lokalizacja opon"
+                                       class="form-control" type="text" th:field="*{tiresLocalization}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h3>Inne</h3>
+                <div class="row">
+                    <!-- Text area -->
+
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Ekwipunek</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+
+                                <textarea class="form-control" name="equipment" th:field="*{equipment}"
+                                          placeholder="Wyposażenie"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text area -->
+
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Uwagi</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+
+                                <textarea class="form-control" name="other" th:field="*{other}"
+                                          placeholder="Uwagi"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Success message -->
+                <div class="alert alert-success" role="alert" id="success_message">Success <i
+                        class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you
+                    shortly.
+                </div>
+
+                <!-- Button -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-warning">Zapisz<span
+                                class="glyphicon glyphicon-send"></span></button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+    </main>
+</div>
+</div>
+
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>

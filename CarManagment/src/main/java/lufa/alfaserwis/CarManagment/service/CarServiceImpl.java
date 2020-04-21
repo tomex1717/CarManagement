@@ -26,7 +26,7 @@ public class CarServiceImpl implements CarService {
     public Car getByRegNumber(String regNumber) {
 
         Optional<Car> result = carRepository.findById(regNumber);
-        Car car = null;
+        Car car;
         if (result.isPresent()) {
             car = result.get();
         }
