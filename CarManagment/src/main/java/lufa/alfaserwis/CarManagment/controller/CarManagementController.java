@@ -30,6 +30,7 @@ public class CarManagementController {
     @GetMapping("/")
     public String home(Model model){
         List<Car> cars = carService.getAll();
+
         model.addAttribute("cars",cars);
         return "home";
     }
@@ -43,12 +44,34 @@ public class CarManagementController {
 
     @PostMapping("/savecar")
     public String saveCar(@ModelAttribute(name = "car") Car car){
-
-        System.out.println("data:" + car.getOcDate());
-
+        if(car.getGasOverviewDate() == null || car.getGasOverviewDate().isEmpty()){
+            car.setGasOverviewDate("1900-01-01");
+        }
+        if(car.getOilDate() == null || car.getOilDate().isEmpty() ){
+            car.setOilDate("1900-01-01");
+        }
+        if(car.getOverviewDate() == null || car.getOverviewDate().isEmpty()){
+            car.setOverviewDate("1900-01-01");
+        }
+        if(car.getFuelCardExpire() == null || car.getFuelCardExpire().isEmpty()){
+            car.setFuelCardExpire("1900-01-01");
+        }
+        if(car.getFirstRegDate() == null || car.getFirstRegDate().isEmpty()){
+            car.setFirstRegDate("1900-01-01");
+        }
+        if(car.getOcDate() == null || car.getOcDate().isEmpty()){
+            car.setOcDate("1900-01-01");
+        }
         carService.save(car);
         return "redirect:/";
     }
 
+
+    @GetMapping("/deletecar")
+    public String deleteCar(@RequestParam("regNumber") String regNumber){
+        carService.deleteById(regNumber);
+        return "redirect:/";
+
+    }
 
 }

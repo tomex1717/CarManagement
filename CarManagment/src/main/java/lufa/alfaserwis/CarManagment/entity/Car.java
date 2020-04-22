@@ -74,6 +74,8 @@ public class Car {
     private String oilDate;
     @Column(name = "gas_overview_date")
     private String gasOverviewDate;
+    @Column(name = "overview_millage")
+    private Integer overviewMillage;
 
     public Car() {
 
