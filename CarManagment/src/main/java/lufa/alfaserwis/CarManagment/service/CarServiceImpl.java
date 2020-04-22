@@ -19,7 +19,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Car> getAll() {
-        return carRepository.findAll();
+
+        return carRepository.findByOrderByRegNumberAsc();
     }
 
     @Override

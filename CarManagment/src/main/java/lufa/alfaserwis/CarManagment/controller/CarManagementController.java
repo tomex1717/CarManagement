@@ -62,6 +62,9 @@ public class CarManagementController {
         if(car.getOcDate() == null || car.getOcDate().isEmpty()){
             car.setOcDate("1900-01-01");
         }
+        if(car.getGasCylinderExpire() == null || car.getGasCylinderExpire().isEmpty()){
+            car.setGasCylinderExpire("1900-01-01");
+        }
         carService.save(car);
         return "redirect:/";
     }
@@ -71,6 +74,14 @@ public class CarManagementController {
     public String deleteCar(@RequestParam("regNumber") String regNumber){
         carService.deleteById(regNumber);
         return "redirect:/";
+
+    }
+
+    @GetMapping("/addcar")
+    public String addCar(Model model){
+        Car car = new Car();
+        model.addAttribute(car);
+        return "car-form";
 
     }
 
