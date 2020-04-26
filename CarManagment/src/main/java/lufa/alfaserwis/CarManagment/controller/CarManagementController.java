@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,13 +21,6 @@ public class CarManagementController {
         this.carService = carService;
     }
 
-    @GetMapping("/carmanagement")
-    public String hello(Model model){
-        List<Car> cars = carService.getAll();
-        model.addAttribute("cars",cars);
-        return "index";
-    }
-
     @GetMapping("/")
     public String home(Model model){
         List<Car> cars = carService.getAll();
@@ -39,32 +33,34 @@ public class CarManagementController {
     public String carForm(@RequestParam("regNumber") String regNumber, Model model){
         Car car = carService.getByRegNumber(regNumber);
         model.addAttribute(car);
+
         return "car-form";
     }
 
     @PostMapping("/savecar")
-    public String saveCar(@ModelAttribute(name = "car") Car car){
-        if(car.getGasOverviewDate() == null || car.getGasOverviewDate().isEmpty()){
-            car.setGasOverviewDate("1900-01-01");
+    public String saveCar(@RequestParam("carPic") MultipartFile carPic, @ModelAttribute(name = "car") Car car){
+        if(car.getGasOverviewDate().isEmpty()){
+            car.setGasOverviewDate(null);
         }
-        if(car.getOilDate() == null || car.getOilDate().isEmpty() ){
-            car.setOilDate("1900-01-01");
+        if(car.getOilDate().isEmpty() ){
+            car.setOilDate(null);
         }
-        if(car.getOverviewDate() == null || car.getOverviewDate().isEmpty()){
-            car.setOverviewDate("1900-01-01");
+        if( car.getOverviewDate().isEmpty()){
+            car.setOverviewDate(null);
         }
         if(car.getFuelCardExpire() == null || car.getFuelCardExpire().isEmpty()){
-            car.setFuelCardExpire("1900-01-01");
+            car.setFuelCardExpire(null);
         }
-        if(car.getFirstRegDate() == null || car.getFirstRegDate().isEmpty()){
-            car.setFirstRegDate("1900-01-01");
+        if(car.getFirstRegDate().isEmpty()){
+            car.setFirstRegDate(null);
         }
-        if(car.getOcDate() == null || car.getOcDate().isEmpty()){
-            car.setOcDate("1900-01-01");
+        if(car.getOcDate().isEmpty()){
+            car.setOcDate(null);
         }
-        if(car.getGasCylinderExpire() == null || car.getGasCylinderExpire().isEmpty()){
-            car.setGasCylinderExpire("1900-01-01");
+        if(car.getGasCylinderExpire().isEmpty()){
+            car.setGasCylinderExpire(null);
         }
+
         carService.save(car);
         return "redirect:/";
     }

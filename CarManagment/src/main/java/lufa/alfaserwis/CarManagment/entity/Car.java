@@ -2,17 +2,16 @@ package lufa.alfaserwis.CarManagment.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "cars")
 public class Car {
+
 
     @Id
     @Column(name = "reg_number")
@@ -76,6 +75,15 @@ public class Car {
     private String gasOverviewDate;
     @Column(name = "overview_millage")
     private Integer overviewMillage;
+
+    @Transient
+    private MultipartFile carPic;
+
+    @Transient
+    private String carPicPath;
+
+    @Transient
+    private String photoDir;
 
     public Car() {
 

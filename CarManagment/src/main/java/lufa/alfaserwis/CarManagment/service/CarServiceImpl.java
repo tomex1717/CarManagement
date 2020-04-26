@@ -5,6 +5,10 @@ import lufa.alfaserwis.CarManagment.entity.Car;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -19,8 +23,16 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Car> getAll() {
+        List<Car> carList = carRepository.findByOrderByRegNumberAsc();
+        for (Car car : carList){
+            Path path = Paths.get(lufa.alfaserwis.utils.Paths.PHOTO_DIR+ car.getRegNumber()+ lufa.alfaserwis.utils.Paths.PHOTO_EXTENSION);
+            if(Files.exists(path)){
+                car.setCarPicPath(path.toString());
+            }
 
-        return carRepository.findByOrderByRegNumberAsc();
+        }
+
+        return carList;
     }
 
     @Override
@@ -38,8 +50,26 @@ public class CarServiceImpl implements CarService {
         return car;
     }
 
+
+
     @Override
     public void save(Car car) {
+
+//        save pic first
+
+        String folder = "C://CarManagementPics//";
+        if(!car.getCarPic().isEmpty()) {
+            try {
+
+                // Get the file and save it somewhere
+                byte[] bytes = car.getCarPic().getBytes();
+                Path path = Paths.get(folder + car.getRegNumber() + ".jpg");
+                Files.write(path, bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+//        save data to db
         carRepository.save(car);
     }
 
