@@ -25,6 +25,8 @@ public class CarManagementController {
     public String home(Model model){
         List<Car> cars = carService.getAll();
 
+
+
         model.addAttribute("cars",cars);
         return "home";
     }

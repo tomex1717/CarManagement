@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="table-view" th:fragment="table-view">
+    <h3>Widok tabeli</h3>
+    <hr>
+    <a th:href="@{/addcar}" class="btn btn-primary btn-sm mb-3" >Dodaj samochód</a>
+    <div class="table-responsive">
+        <table class="table table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Numer Rejestracyjny</th>
+                <th scope="col">Marka</th>
+                <th scope="col">Model</th>
+                <th scope="col">Ksywka</th>
+                <th scope="col">Użytkownik</th>
+                <th scope="col">Akcja</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="car : ${cars}">
+                <th scope="row" th:text="${car.getRegNumber()}"></th>
+                <td th:text="${car.getMark()}"></td>
+                <td th:text="${car.getModel()}"></td>
+                <td th:text="${car.getNickname()}"></td>
+                <td th:text="${car.getUser()}"></td>
+                <td>
+                    <a th:href="@{/updatecar(regNumber=${car.getRegNumber()})}" class="btn btn-info btn-sm">
+                        Edytuj
+                    </a>
+                    <a th:href="@{/deletecar(regNumber=${car.getRegNumber()})}" class="btn btn-danger btn-sm"
+                       onclick="if (!(confirm('Usunąć samochód z bazy danych??'))) return false">
+                        Usuń
+                    </a>
+
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -52,9 +52,28 @@ main .card {
 
 }
 
-#carPhoto{
+.carPhoto{
     max-width: 267px;
     max-height: 150px;
+    object-fit: contain;
+}
 
+.card-edit-button{
+    margin-top: 10px;
+    margin-right: 5px;
+    margin-left: 10px;
+}
+
+.card{
+    background: #e7e7e7;
+
+}
+
+.card-title{
+    font-style: italic;
+    text-decoration: underline;
+}
+.card-column{
+    float: left;
 }
 
