@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="head-section">
+
+</head>
+
+
+<body>
+<nav th:replace="top-nav-bar">
+</nav>
+
+<div class="container-fluid">
+
+    <!--    NavBar Section-->
+
+    <div th:replace="side-nav-bar"></div>
+
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+
+
+        <h3 th:if="${carRepair.getId()==0}" th:text="'Dodaj naprawę (' + ${car.getRegNumber()} + ', ' + ${car.getMark()} + ' ' + ${car.getModel()}  +')'"></h3>
+        <h3 th:if="${carRepair.getId()!=0}" th:text="'Edytuj naprawę (' + ${car.getRegNumber()} + ', ' + ${car.getMark()} + ' ' + ${car.getModel()}  +')'"></h3>
+
+        <hr>
+
+        <h3>Dane dotyczące naprawy:</h3>
+        <form class="well form-horizontal" th:action="@{/saverepair}" method="post" id="contact_form"
+              th:object="${carRepair}"
+              enctype="multipart/form-data">
+            <fieldset>
+
+                <input th:field="*{regNumber}" hidden>
+                <input th:field="*{id}" hidden>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Mechanik</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Mechanik" class="form-control" type="text"
+                                       required th:field="*{mechanic}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Data</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Data" class="form-control" type="date" required
+                                       th:field="*{date}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Co zrobione</label>
+                    <div class="col-md-4 inputGroupContainer ">
+                        <div class="input-group">
+                            <textarea class="form-control" th:field="*{whatRepaired}"
+                                      placeholder="Co zostało zrobione"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                    <h3>Faktury</h3>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Faktura (max 2MB)</label>
+                        <div class="col-md-3 input-group date">
+                            <div class="input-group">
+
+                                <input name="invoice" class="form-control" type="file">
+                            </div>
+                        </div>
+                    </div>
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Netto łącznie</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Netto" class="form-control" type="text" required
+                                       th:field="*{totalNet}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-auto control-label">Brutto łącznie</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Brutto" class="form-control" type="text" required
+                                       th:field="*{totalGross}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <!-- Button -->
+
+                    <div class="form-group">
+                        <label class="col-md-auto control-label"></label>
+                        <div class="col-md-auto">
+                            <button type="submit" class="btn btn-warning">Zapisz<span
+                                    class="glyphicon glyphicon-send"></span></button>
+                            <a th:if="${carRepair.getId()!=0}" th:href="@{/deletecarrepair(id=${carRepair.getId()})}"class="btn btn-danger btn-sm"
+                               onclick="if (!(confirm('Usunąć naprawę z bazy danych??'))) return false">
+                                Usuń
+                            </a>
+
+                        </div>
+                    </div>
+
+
+
+
+
+            </fieldset>
+        </form>
+
+    </main>
+
+
+</div>
+</body>
+</html>

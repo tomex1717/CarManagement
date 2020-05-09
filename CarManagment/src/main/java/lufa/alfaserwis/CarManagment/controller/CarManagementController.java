@@ -1,6 +1,8 @@
 package lufa.alfaserwis.CarManagment.controller;
 
 import lufa.alfaserwis.CarManagment.entity.Car;
+import lufa.alfaserwis.CarManagment.entity.CarRepair;
+import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,11 +16,12 @@ import java.util.List;
 @RequestMapping("/")
 public class CarManagementController {
 
-    CarService carService;
-
+    private CarService carService;
+    private CarRepairService carRepairService;
     @Autowired
-    public CarManagementController(CarService carService) {
+    public CarManagementController(CarService carService,CarRepairService carRepairService) {
         this.carService = carService;
+        this.carRepairService = carRepairService;
     }
 
     @GetMapping("/")
@@ -47,10 +50,10 @@ public class CarManagementController {
         if(car.getOilDate().isEmpty() ){
             car.setOilDate(null);
         }
-        if( car.getOverviewDate().isEmpty()){
+        if(car.getOverviewDate().isEmpty()){
             car.setOverviewDate(null);
         }
-        if(car.getFuelCardExpire() == null || car.getFuelCardExpire().isEmpty()){
+        if(car.getFuelCardExpire().isEmpty()){
             car.setFuelCardExpire(null);
         }
         if(car.getFirstRegDate().isEmpty()){
@@ -80,6 +83,50 @@ public class CarManagementController {
         Car car = new Car();
         model.addAttribute(car);
         return "car-form";
+
+    }
+
+    @GetMapping("/showrepairs")
+    public String showRepairs(Model model, @RequestParam("regNumber") String regNumber){
+        model.addAttribute("regNumber" , regNumber);
+        model.addAttribute("repairs",carRepairService.getByRegNumber(regNumber));
+        return "repair-view";
+    }
+
+    @GetMapping("/addcarrepair")
+    public String addCarRepair(Model model, @RequestParam("regNumber") String   regNumber){
+        CarRepair carRepair = new CarRepair();
+        carRepair.setRegNumber(regNumber);
+        model.addAttribute("carRepair", carRepair);
+        Car car = carService.getByRegNumber(regNumber);
+        model.addAttribute("car", car);
+        return "car-repair-form";
+    }
+
+    @PostMapping("/saverepair")
+    public String saveRepair(@RequestParam("carPic") MultipartFile invoice, @ModelAttribute(name = "carRepair") CarRepair carRepair){
+
+        carRepairService.save(carRepair);
+        return "redirect:/showrepairs?regNumber=" + carRepair.getRegNumber();
+
+    }
+
+    @GetMapping("/updatecarrepair")
+    public String updateCarRepair(Model model, @RequestParam("id") int id){
+        CarRepair carRepair = carRepairService.getById(id);
+
+        model.addAttribute("carRepair", carRepair);
+        Car car = carService.getByRegNumber(carRepair.getRegNumber());
+        model.addAttribute("car", car);
+        return "car-repair-form";
+    }
+
+    @GetMapping("/deletecarrepair")
+    public String deleteRepair(@RequestParam("id") Integer id){
+        String regNumber = carRepairService.getById(id).getRegNumber();
+        carRepairService.deleteById(id);
+
+        return "redirect:/showrepairs?regNumber=" + regNumber;
 
     }
 

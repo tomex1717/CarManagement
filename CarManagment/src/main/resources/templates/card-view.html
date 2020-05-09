@@ -21,7 +21,7 @@
 
                 <div class="row">
                     <div class="col-sm-auto">
-                        <img th:src="@{'/imgs/'+ ${car.getRegNumber()}+.jpg}" class="carPhoto" th:if="${car.getCarPicPath()}!=null">
+                        <img th:src="@{'/imgs/'+ ${car.getRegNumber()}+.jpg}" class="carPhoto"  th:if="${car.getCarPicPath()}!=null">
                     </div>
                     <div class="col-md-auto">
                         <h5 th:text="'Marka: ' + ${car.getMark()}"></h5>
@@ -43,6 +43,8 @@
                        onclick="if (!(confirm('Usunąć samochód z bazy danych??'))) return false">
                         Usuń
                     </a>
+
+
 
                 </div>
 

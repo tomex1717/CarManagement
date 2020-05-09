@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
+<head th:replace="head-section">
+
+</head>
+<body>
+<nav th:replace="top-nav-bar">
+</nav>
+
+<div class="container-fluid">
+
+    <!--    NavBar Section-->
+
+    <div th:replace="side-nav-bar"></div>
+
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <h2 th:text="${regNumber} + ' - Naprawy Samochodu'" class="reg-number-title"></h2>
+
+
+        <hr>
+        <a th:href="@{/addcarrepair(regNumber=${regNumber})}" class="btn btn-primary btn-sm mb-3" >Dodaj Naprawę</a>
+        <div class="table-responsive">
+            <table class="table table-dark">
+                <thead>
+                <tr>
+
+                    <th scope="col">Mechanik</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Lącznie netto</th>
+                    <th scope="col">Lacznie brutto</th>
+                    <th th:text="Akcja"></th>
+
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="carRepair : ${repairs}">
+
+                    <th scope="row" th:text="${carRepair.getMechanic()}"></th>
+                    <td th:text="${carRepair.getDate()}"></td>
+                    <td th:text="${carRepair.getTotalNet()}"></td>
+                    <td th:text="${carRepair.getTotalGross()}"></td>
+
+
+                    <td>
+                        <a th:href="@{/updatecarrepair(id=${carRepair.getId()})}" class="btn btn-info btn-sm">
+                            Edytuj
+                        </a>
+                        <a th:href="@{/deletecarrepair(id=${carRepair.getId()})}" class="btn btn-danger btn-sm"
+                           onclick="if (!(confirm('Usunąć naprawę z bazy danych??'))) return false">
+                            Usuń
+                        </a>
+
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+</body>
+</html>
