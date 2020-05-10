@@ -23,7 +23,7 @@
 
                 <!-- Form Name -->
                 <legend class="reg-number-title " th:text="${car.getRegNumber()}"></legend>
-                <img th:src="@{'/imgs/'+ ${car.getRegNumber()}+.jpg}" alt="Brak zdjęcia" class="carPhoto">
+                <img th:src="@{'/imgs/'+ ${car.getCarPicName()}}" alt="Brak zdjęcia" class="carPhoto">
                 <hr>
                 <!-- Text input-->
                 <h3>Postawowe dane</h3>

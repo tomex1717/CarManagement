@@ -75,15 +75,16 @@ public class Car {
     private String gasOverviewDate;
     @Column(name = "overview_millage")
     private Integer overviewMillage;
-
+    @Column(name = "pic_name")
+    private String carPicName;
+    @Column(name = "pic_path")
+    private String carPicPath;
     @Transient
     private MultipartFile carPic;
 
-    @Transient
-    private String carPicPath;
 
-    @Transient
-    private String photoDir;
+
+
 
     public Car() {
 

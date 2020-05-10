@@ -14,6 +14,7 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
         registry.addResourceHandler("/resources/static/**").addResourceLocations("/resources/static/");
         registry.addResourceHandler("/imgs/**").addResourceLocations("file:///" + Paths.PHOTO_PATH,"static/images/");
+        registry.addResourceHandler("/invoices/**").addResourceLocations("file:///" + Paths.INVOICES_PATH);
 
 
     }

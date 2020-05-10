@@ -24,13 +24,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<Car> getAll() {
         List<Car> carList = carRepository.findByOrderByRegNumberAsc();
-        for (Car car : carList){
-            Path path = Paths.get(lufa.alfaserwis.utils.Paths.PHOTO_PATH + car.getRegNumber()+ lufa.alfaserwis.utils.Paths.PHOTO_EXTENSION);
-            if(Files.exists(path)){
-                car.setCarPicPath(path.toString());
-            }
 
-        }
 
         return carList;
     }
@@ -47,12 +41,8 @@ public class CarServiceImpl implements CarService {
 
             throw new RuntimeException("Nie znaleziono samochodu o podanym numerze rejestracyjnym" + regNumber);
         }
-        Path path = Paths.get(lufa.alfaserwis.utils.Paths.PHOTO_PATH + car.getRegNumber()+ lufa.alfaserwis.utils.Paths.PHOTO_EXTENSION);
-        if(Files.exists(path)){
-            car.setCarPicPath(path.toString());
-        } else {
-            car.setCarPicPath(null);
-        }
+
+
         return car;
     }
 
@@ -67,7 +57,9 @@ public class CarServiceImpl implements CarService {
 
                 // Get the file and save it somewhere
                 byte[] bytes = car.getCarPic().getBytes();
-                Path path = Paths.get(lufa.alfaserwis.utils.Paths.PHOTO_PATH + car.getRegNumber() + ".jpg");
+                Path path = Paths.get(lufa.alfaserwis.utils.Paths.PHOTO_PATH + car.getCarPic().getOriginalFilename());
+                car.setCarPicName(car.getCarPic().getOriginalFilename());
+                car.setCarPicPath(path.toString());
                 Files.write(path, bytes);
             } catch (IOException e) {
                 e.printStackTrace();

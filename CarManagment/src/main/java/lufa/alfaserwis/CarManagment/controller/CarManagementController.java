@@ -65,7 +65,9 @@ public class CarManagementController {
         if(car.getGasCylinderExpire().isEmpty()){
             car.setGasCylinderExpire(null);
         }
-
+        if(car.getCarPicName()==null){
+            car.setCarPicName("car-pic-not-found.webp");
+        }
         carService.save(car);
         return "redirect:/";
     }
@@ -81,6 +83,7 @@ public class CarManagementController {
     @GetMapping("/addcar")
     public String addCar(Model model){
         Car car = new Car();
+
         model.addAttribute(car);
         return "car-form";
 
