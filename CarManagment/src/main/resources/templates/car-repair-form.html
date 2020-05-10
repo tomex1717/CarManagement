@@ -67,7 +67,7 @@
 
                 <hr>
 
-                    <h3>Faktury</h3>
+                    <h3>Faktura</h3>
 
                     <div class="form-group">
                         <label class="col-md-3 control-label">Faktura (max 2MB)</label>
@@ -102,7 +102,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="see_invoice" th:if="${carRepair.getInvoiceName()!=null}">
+                    <h5>Zobacz fakturę</h5>
 
+                    <a th:href="@{'/invoices/'+ ${carRepair.getInvoiceName()}}" th:text="${carRepair.getInvoiceName()}"></a>
+
+
+
+
+                </div>
 
 
 

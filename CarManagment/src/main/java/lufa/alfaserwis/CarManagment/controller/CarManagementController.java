@@ -107,7 +107,7 @@ public class CarManagementController {
     }
 
     @PostMapping("/saverepair")
-    public String saveRepair(@RequestParam("carPic") MultipartFile invoice, @ModelAttribute(name = "carRepair") CarRepair carRepair){
+    public String saveRepair(@RequestParam("invoice") MultipartFile invoice, @ModelAttribute(name = "carRepair") CarRepair carRepair){
 
         carRepairService.save(carRepair);
         return "redirect:/showrepairs?regNumber=" + carRepair.getRegNumber();

@@ -2,6 +2,7 @@ package lufa.alfaserwis.CarManagment.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -27,5 +28,8 @@ public class CarRepair {
     private Integer totalGross;
     @Column(name = "what_repaired")
     private String whatRepaired;
-
+    @Column(name = "invoice_name")
+    private String invoiceName;
+    @Transient
+    private MultipartFile invoice;
 }

@@ -39,6 +39,9 @@
                     <a th:href="@{/updatecar(regNumber=${car.getRegNumber()})}" class="btn btn-info btn-sm card-edit-button" >
                         Edytuj
                     </a>
+                    <a th:href="@{/showrepairs(regNumber=${car.getRegNumber()})}" class="btn btn-warning btn-sm card-edit-button">
+                        Naprawy
+                    </a>
                     <a th:href="@{/deletecar(regNumber=${car.getRegNumber()})}" class="btn btn-danger btn-sm card-edit-button"
                        onclick="if (!(confirm('Usunąć samochód z bazy danych??'))) return false">
                         Usuń

@@ -5,6 +5,10 @@ import lufa.alfaserwis.CarManagment.entity.CarRepair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +34,22 @@ public class CarRepairServiceImpl implements CarRepairService {
 
     @Override
     public void save(CarRepair carRepair) {
+        if(!carRepair.getInvoice().isEmpty()) {
+            try {
+
+                // Get the file and save it somewhere
+                byte[] bytes = carRepair.getInvoice().getBytes();
+                Path path = Paths.get(lufa.alfaserwis.utils.Paths.INVOICES_PATH + carRepair.getInvoice().getOriginalFilename());
+                carRepair.setInvoiceName(carRepair.getInvoice().getOriginalFilename());
+
+                Files.write(path, bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
         carRepairRepository.save(carRepair);
     }
 
