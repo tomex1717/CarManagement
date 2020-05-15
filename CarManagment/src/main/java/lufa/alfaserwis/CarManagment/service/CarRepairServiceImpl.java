@@ -92,12 +92,31 @@ public class CarRepairServiceImpl implements CarRepairService {
         return carRepair;
     }
 
-    public void deleteInvoice(Invoice invoice){
+    @Override
+    public Invoice getInvoiceById(int id) {
+        Optional<Invoice> result = invoiceRepository.findById(id);
+        Invoice invoice;
+        if (result.isPresent()) {
+            invoice = result.get();
+        }
+        else {
+
+            throw new RuntimeException("Nie znaleziono naprawy samochodu o podanym ID: " + id);
+        }
+
+        return invoice;
+    }
+
+    public void deleteInvoice(int id){
+
+
+        Invoice invoice = getInvoiceById(id);
         try{
             Files.delete(Paths.get(lufa.alfaserwis.utils.Paths.INVOICES_PATH+invoice.getFileName()));
 
         } catch (IOException e){
             log.error("nie można usunąć faktury");
+            System.out.println(Paths.get(lufa.alfaserwis.utils.Paths.INVOICES_PATH+invoice.getFileName()));
         }
 
         invoiceRepository.delete(invoice);

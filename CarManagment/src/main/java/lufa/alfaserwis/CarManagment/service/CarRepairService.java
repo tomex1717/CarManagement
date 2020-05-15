@@ -12,7 +12,8 @@ public interface CarRepairService {
     void save(CarRepair carRepair);
     void deleteById(int id);
     CarRepair getById(int id);
-    void deleteInvoice(Invoice invoice);
+    void deleteInvoice(int id);
+    Invoice getInvoiceById(int id);
 
 
 }

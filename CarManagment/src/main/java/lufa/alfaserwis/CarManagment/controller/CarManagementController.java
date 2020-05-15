@@ -2,7 +2,6 @@ package lufa.alfaserwis.CarManagment.controller;
 
 import lufa.alfaserwis.CarManagment.entity.Car;
 import lufa.alfaserwis.CarManagment.entity.CarRepair;
-import lufa.alfaserwis.CarManagment.entity.Invoice;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,8 +136,8 @@ public class CarManagementController {
     }
 
     @GetMapping("/deleteinvoice")
-    public String deleteInvoice(Model model, @ModelAttribute Invoice invoice, @RequestParam int carrepairid){
-        carRepairService.deleteInvoice(invoice);
+    public String deleteInvoice(Model model, @RequestParam int invoiceId, @RequestParam int carrepairid){
+        carRepairService.deleteInvoice(invoiceId);
 
 
 
