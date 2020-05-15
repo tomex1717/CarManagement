@@ -29,6 +29,7 @@
                     <th scope="col">Data</th>
                     <th scope="col">Lącznie netto</th>
                     <th scope="col">Lacznie brutto</th>
+                    <th scope="col">Co zrobione</th>
                     <th th:text="Akcja"></th>
 
 
@@ -41,7 +42,7 @@
                     <td th:text="${carRepair.getDate()}"></td>
                     <td th:text="${carRepair.getTotalNet()}"></td>
                     <td th:text="${carRepair.getTotalGross()}"></td>
-
+                    <td th:text="${carRepair.getWhatRepaired()}"></td>
 
                     <td>
                         <a th:href="@{/updatecarrepair(id=${carRepair.getId()})}" class="btn btn-info btn-sm">

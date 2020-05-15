@@ -102,10 +102,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="see_invoice" th:if="${carRepair.getInvoiceName()!=null}">
-                    <h5>Zobacz fakturę</h5>
+                <div  th:if="${!carRepair.getInvoices().isEmpty()}">
+                    <h5>Zobacz faktury</h5>
+                    <table>
 
-                    <a th:href="@{'/invoices/'+ ${carRepair.getInvoiceName()}}" th:text="${carRepair.getInvoiceName()}"></a>
+                        <tbody>
+
+                        <tr th:each="invoice : ${carRepair.getInvoices()}">
+                            <a th:href="@{'/invoices/'+ ${invoice.getFileName()}}" th:text="${invoice.getFileName()}" th:target="_blank"></a>
+                            <a th:href="@{/deleteinvoice(id=${invoice.getId()}, carrepairid= ${carRepair.getId()})}"
+                               onclick="if (!(confirm('Usunąć faktruę??'))) return false"
+                               class="delete-invoice"
+                               >Usuń </a>
+                            <br>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
 
 
 

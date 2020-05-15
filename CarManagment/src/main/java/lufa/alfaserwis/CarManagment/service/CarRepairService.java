@@ -1,6 +1,7 @@
 package lufa.alfaserwis.CarManagment.service;
 
 import lufa.alfaserwis.CarManagment.entity.CarRepair;
+import lufa.alfaserwis.CarManagment.entity.Invoice;
 
 import java.util.List;
 
@@ -11,5 +12,7 @@ public interface CarRepairService {
     void save(CarRepair carRepair);
     void deleteById(int id);
     CarRepair getById(int id);
+    void deleteInvoice(Invoice invoice);
+
 
 }

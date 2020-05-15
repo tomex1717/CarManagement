@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,6 +16,7 @@ public class CarRepair {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @Column(name = "reg_number")
@@ -28,8 +31,18 @@ public class CarRepair {
     private Integer totalGross;
     @Column(name = "what_repaired")
     private String whatRepaired;
-    @Column(name = "invoice_name")
-    private String invoiceName;
+
+    @OneToMany(cascade = {CascadeType.ALL
+                })
+    @JoinColumn(name = "car_repair_id",nullable = false)
+    private List<Invoice> invoices = new ArrayList<>();
+
     @Transient
     private MultipartFile invoice;
+
+
+
+    public void addInvoice(Invoice invoice){
+        invoices.add(invoice);
+    }
 }

@@ -2,6 +2,7 @@ package lufa.alfaserwis.CarManagment.controller;
 
 import lufa.alfaserwis.CarManagment.entity.Car;
 import lufa.alfaserwis.CarManagment.entity.CarRepair;
+import lufa.alfaserwis.CarManagment.entity.Invoice;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,7 @@ public class CarManagementController {
     @GetMapping("/addcar")
     public String addCar(Model model){
         Car car = new Car();
-
+        car.setCarPicName("car-pic-not-found.webp");
         model.addAttribute(car);
         return "car-form";
 
@@ -92,6 +93,7 @@ public class CarManagementController {
     @GetMapping("/showrepairs")
     public String showRepairs(Model model, @RequestParam("regNumber") String regNumber){
         model.addAttribute("regNumber" , regNumber);
+
         model.addAttribute("repairs",carRepairService.getByRegNumber(regNumber));
         return "repair-view";
     }
@@ -119,6 +121,7 @@ public class CarManagementController {
         CarRepair carRepair = carRepairService.getById(id);
 
         model.addAttribute("carRepair", carRepair);
+        System.out.println(carRepair.getInvoices().toString());
         Car car = carService.getByRegNumber(carRepair.getRegNumber());
         model.addAttribute("car", car);
         return "car-repair-form";
@@ -133,4 +136,21 @@ public class CarManagementController {
 
     }
 
+    @GetMapping("/deleteinvoice")
+    public String deleteInvoice(Model model, @ModelAttribute Invoice invoice, @RequestParam int carrepairid){
+        carRepairService.deleteInvoice(invoice);
+
+
+
+
+
+
+        return "redirect:/updatecarrepair?id="+ carrepairid;
+    }
+
+
+
+
+
+    //TODO add spring serurity
 }

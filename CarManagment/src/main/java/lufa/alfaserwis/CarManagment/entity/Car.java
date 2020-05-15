@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -15,6 +16,7 @@ public class Car {
 
     @Id
     @Column(name = "reg_number")
+    @Size(min=2, max=10)
     private String regNumber;
 
     @Column(name = "mark")
@@ -82,7 +84,7 @@ public class Car {
     @Transient
     private MultipartFile carPic;
 
-
+//TODO add validation to every field
 
 
 

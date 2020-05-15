@@ -11,5 +11,4 @@ public interface CarRepairRepository extends JpaRepository<CarRepair,Integer> {
     List<CarRepair> findByOrderByDateAsc();
     List<CarRepair> findByRegNumber(String regNumber);
 
-
 }

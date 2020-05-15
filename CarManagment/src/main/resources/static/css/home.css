@@ -83,3 +83,7 @@ main .card {
     margin-left: 8px;
 }
 
+.delete-invoice{
+    margin-left: 20px;
+    color: RED;
+}

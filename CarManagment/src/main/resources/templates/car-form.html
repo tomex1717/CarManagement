@@ -35,6 +35,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Number Rejestracyjny" class="form-control"
                                        type="text" th:field="*{regNumber}" required>
+                                <div th:if="${#fields.hasErrors('regNumber')}" th:errors="*{regNumber}">min 3 znaki max 10</div>
                             </div>
                         </div>
                     </div>
