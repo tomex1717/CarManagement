@@ -7,9 +7,11 @@ import lufa.alfaserwis.CarManagment.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -27,11 +29,16 @@ public class CarManagementController {
     @GetMapping("/")
     public String home(Model model){
         List<Car> cars = carService.getAll();
-
-
-
         model.addAttribute("cars",cars);
-        return "home";
+        return "card-view";
+    }
+
+    @GetMapping("/tableview")
+    public String tableView(Model model){
+        List<Car> cars = carService.getAll();
+        model.addAttribute("cars",cars);
+        return "table-view";
+
     }
 
     @GetMapping("/updatecar")
@@ -43,7 +50,8 @@ public class CarManagementController {
     }
 
     @PostMapping("/savecar")
-    public String saveCar(@RequestParam("carPic") MultipartFile carPic, @ModelAttribute(name = "car") Car car){
+    public String saveCar(@RequestParam("carPic") MultipartFile carPic,@Valid @ModelAttribute(name = "car") Car car,
+                         BindingResult bindingResult){
         if(car.getGasOverviewDate().isEmpty()){
             car.setGasOverviewDate(null);
         }
@@ -68,6 +76,10 @@ public class CarManagementController {
         if(car.getCarPicName()==null){
             car.setCarPicName("car-pic-not-found.webp");
         }
+        if (bindingResult.hasErrors()) {
+            return "car-form";
+        }
+
         carService.save(car);
         return "redirect:/";
     }
@@ -83,6 +95,7 @@ public class CarManagementController {
     @GetMapping("/addcar")
     public String addCar(Model model){
         Car car = new Car();
+        car.setNew(true);
         car.setCarPicName("car-pic-not-found.webp");
         model.addAttribute(car);
         return "car-form";
@@ -147,6 +160,10 @@ public class CarManagementController {
         return "redirect:/updatecarrepair?id="+ carrepairid;
     }
 
+    @GetMapping("/navbar")
+    public String navbar(){
+        return "top-nav-bar";
+    }
 
 
 

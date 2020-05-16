@@ -1,60 +1,74 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<head th:replace="head-section">
+
 </head>
 <body>
-<div class="card-view" th:fragment="card-view">
-
-
-    <h3>Widok kart</h3>
-    <hr>
+<div th:replace="top-nav-bar"></div>
+<div class="card-view">
 
 
 
-    <!--    <div class="row" th:each="car,iter : ${cars}">-->
-    <div class="col-sm-6 card-column" th:each="car,iter : ${cars}">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title" th:text="'Nr Rej. ' + ${car.getRegNumber()}"></h5>
 
-                <div class="row">
-                    <div class="col-sm-auto">
-                        <img th:src="@{'/imgs/'+ ${car.getCarPicName()}}" class="carPhoto"  th:if="${car.getCarPicName()}!=null">
+
+        <main role="main" class="col-md-9 mainContainer">
+            <div class="container-fluid">
+            <h3>Widok kart</h3>
+
+            <hr>
+            <a th:href="@{/addcar}" class="btn btn-primary btn-sm mb-3">Dodaj samochód</a>
+            <div>
+            <div class="col-sm-5 card-column" th:each="car,iter : ${cars}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="'Nr Rej. ' + ${car.getRegNumber()}"></h5>
+
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <img th:src="@{'/imgs/'+ ${car.getCarPicName()}}" class="carPhoto"  th:if="${car.getCarPicName()}!=null">
+                            </div>
+                            <div class="col-md-auto card-car-details">
+                                <h5 th:text="'Marka: ' + ${car.getMark()}"></h5>
+                                <br>
+                                <h5 th:text="'Model: ' + ${car.getModel()}"></h5>
+                                <br>
+                                <h5 th:text="'Ksywka: ' + ${car.getNickname()}"></h5>
+                                <br>
+                                <h5 th:text="'Uzytkownik: ' + ${car.getUser()}"></h5>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <a th:href="@{/updatecar(regNumber=${car.getRegNumber()})}" class="btn btn-info btn-sm card-edit-button" >
+                                Edytuj
+                            </a>
+                            <a th:href="@{/showrepairs(regNumber=${car.getRegNumber()})}" class="btn btn-warning btn-sm card-edit-button">
+                                Naprawy
+                            </a>
+                            <a th:href="@{/deletecar(regNumber=${car.getRegNumber()})}" class="btn btn-danger btn-sm card-edit-button"
+                               onclick="if (!(confirm('Usunąć samochód z bazy danych??'))) return false">
+                                Usuń
+                            </a>
+
+
+
+                        </div>
+
                     </div>
-                    <div class="col-md-auto">
-                        <h5 th:text="'Marka: ' + ${car.getMark()}"></h5>
-                        <br>
-                        <h5 th:text="'Model: ' + ${car.getModel()}"></h5>
-                        <br>
-                        <h5 th:text="'Ksywka: ' + ${car.getNickname()}"></h5>
-                        <br>
-                        <h5 th:text="'Uzytkownik: ' + ${car.getUser()}"></h5>
-
-                    </div>
-
                 </div>
-                <div class="row">
-                    <a th:href="@{/updatecar(regNumber=${car.getRegNumber()})}" class="btn btn-info btn-sm card-edit-button" >
-                        Edytuj
-                    </a>
-                    <a th:href="@{/showrepairs(regNumber=${car.getRegNumber()})}" class="btn btn-warning btn-sm card-edit-button">
-                        Naprawy
-                    </a>
-                    <a th:href="@{/deletecar(regNumber=${car.getRegNumber()})}" class="btn btn-danger btn-sm card-edit-button"
-                       onclick="if (!(confirm('Usunąć samochód z bazy danych??'))) return false">
-                        Usuń
-                    </a>
-
-
-
-                </div>
-
             </div>
-        </div>
-    </div>
+            </div>
+            </div>
+        </main>
+
+
+
+
+
 
 </div>
+
+<footer th:replace="footer"></footer>
 </body>
 </html>

@@ -13,7 +13,7 @@
 
     <!--    NavBar Section-->
 
-    <div th:replace="side-nav-bar"></div>
+
 
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
@@ -136,7 +136,7 @@
                     <div class="form-group">
                         <label class="col-md-auto control-label"></label>
                         <div class="col-md-auto">
-                            <button type="submit" class="btn btn-warning">Zapisz<span
+                            <button type="submit" class="btn btn-success">Zapisz<span
                                     class="glyphicon glyphicon-send"></span></button>
                             <a th:if="${carRepair.getId()!=0}" th:href="@{/deletecarrepair(id=${carRepair.getId()})}"class="btn btn-danger btn-sm"
                                onclick="if (!(confirm('Usunąć naprawę z bazy danych??'))) return false">
@@ -157,5 +157,6 @@
 
 
 </div>
+<div th:replace="footer"></div>
 </body>
 </html>

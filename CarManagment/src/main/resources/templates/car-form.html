@@ -13,7 +13,7 @@
 
     <!--    NavBar Section-->
 
-    <div th:replace="side-nav-bar"></div>
+
 
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
@@ -29,13 +29,14 @@
                 <h3>Postawowe dane</h3>
                 <div class="row">
                     <div class="form-group" th:if="${car.getRegNumber()}==null" >
+
                         <label class="col-md-auto control-label">Number Rejestracyjny</label>
                         <div class="col-md-auto inputGroupContainer">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Number Rejestracyjny" class="form-control"
                                        type="text" th:field="*{regNumber}" required>
-                                <div th:if="${#fields.hasErrors('regNumber')}" th:errors="*{regNumber}">min 3 znaki max 10</div>
+
                             </div>
                         </div>
                     </div>
@@ -57,6 +58,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Marka" class="form-control" type="text"
                                        th:field="*{mark}" required>
+                                <div class="error-message" th:if="${#fields.hasErrors('mark')}" th:errors="*{mark}"></div>
                             </div>
                         </div>
                     </div>
@@ -69,6 +71,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Model" class="form-control" type="text"
                                        th:field="*{model}" required>
+                                <div class="error-message" th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
                             </div>
                         </div>
                     </div>
@@ -93,6 +96,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Ksywka" class="form-control" type="text"
                                        th:field="*{nickname}">
+                                <div class="error-message" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></div>
                             </div>
                         </div>
                     </div>
@@ -105,6 +109,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Miasto" class="form-control" type="text"
                                        th:field="*{city}">
+                                <div class="error-message" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
                             </div>
                         </div>
                     </div>
@@ -117,6 +122,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Użytkownik" class="form-control" type="text"
                                        th:field="*{user}">
+                                <div class="error-message" th:if="${#fields.hasErrors('user')}" th:errors="*{user}"></div>
                             </div>
                         </div>
                     </div>
@@ -130,6 +136,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Kolor" class="form-control" type="text"
                                        th:field="*{color}">
+                                <div class="error-message" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
                             </div>
                         </div>
                     </div>
@@ -222,6 +229,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Przegieg przy przeglądzie"
                                        class="form-control" type="text" th:field="*{overviewMillage}">
+                                <div class="error-message" th:if="${#fields.hasErrors('overviewMillage')}" th:errors="*{overviewMillage}"></div>
                             </div>
                         </div>
                     </div>
@@ -237,6 +245,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="YYYY-MM-DD" class="form-control" type="date"
                                        th:field="*{oilDate}" value="01.01.2010">
+
                             </div>
                         </div>
                     </div>
@@ -249,6 +258,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Przegieg przy przeglądzie"
                                        class="form-control" type="text" th:field="*{oilMillage}">
+                                <div class="error-message" th:if="${#fields.hasErrors('oilMillage')}" th:errors="*{oilMillage}"></div>
                             </div>
                         </div>
                     </div>
@@ -276,6 +286,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder=">Przegieg przy przeglądzie gazu"
                                        class="form-control" type="text" th:field="*{gasOverviewMillage}">
+                                <div class="error-message" th:if="${#fields.hasErrors('gasOverviewMillage')}" th:errors="*{gasOverviewMillage}"></div>
                             </div>
                         </div>
                     </div>
@@ -304,6 +315,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Ubezpieczyciel" class="form-control" type="text"
                                        th:field="*{insurer}">
+                                <div class="error-message" th:if="${#fields.hasErrors('insurer')}" th:errors="*{insurer}"></div>
                             </div>
                         </div>
                     </div>
@@ -328,6 +340,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="OC Firma" class="form-control" type="text"
                                        th:field="*{ocCompany}">
+                                <div class="error-message" th:if="${#fields.hasErrors('ocCompany')}" th:errors="*{ocCompany}"></div>
                             </div>
                         </div>
                     </div>
@@ -340,6 +353,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="AC firma"
                                        class="form-control" type="text" th:field="*{acCompany}">
+                                <div class="error-message" th:if="${#fields.hasErrors('acCompany')}" th:errors="*{acCompany}"></div>
                             </div>
                         </div>
                     </div>
@@ -351,6 +365,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Assistant"
                                        class="form-control" type="text" th:field="*{assistant}">
+                                <div class="error-message" th:if="${#fields.hasErrors('assistant')}" th:errors="*{assistant}"></div>
                             </div>
                         </div>
                     </div>
@@ -366,6 +381,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Letnie rozmiar" class="form-control" type="text"
                                        th:field="*{summerTiresSize}">
+                                <div class="error-message" th:if="${#fields.hasErrors('summerTiresSize')}" th:errors="*{summerTiresSize}"></div>
                             </div>
                         </div>
                     </div>
@@ -378,6 +394,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Zimowe rozmiar"
                                        class="form-control" type="text" th:field="*{winterTiresSize}">
+                                <div class="error-message" th:if="${#fields.hasErrors('winterTiresSize')}" th:errors="*{winterTiresSize}"></div>
                             </div>
                         </div>
                     </div>
@@ -389,6 +406,7 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Lokalizacja opon"
                                        class="form-control" type="text" th:field="*{tiresLocalization}">
+                                <div class="error-message" th:if="${#fields.hasErrors('tiresLocalization')}" th:errors="*{tiresLocalization}"></div>
                             </div>
                         </div>
                     </div>
@@ -405,6 +423,7 @@
 
                                 <textarea class="form-control" name="equipment" th:field="*{equipment}"
                                           placeholder="Wyposażenie"></textarea>
+                                <div class="error-message" th:if="${#fields.hasErrors('equipment')}" th:errors="*{equipment}"></div>
                             </div>
                         </div>
                     </div>
@@ -418,25 +437,25 @@
 
                                 <textarea class="form-control" name="other" th:field="*{other}"
                                           placeholder="Uwagi"></textarea>
+                                <div class="error-message" th:if="${#fields.hasErrors('other')}" th:errors="*{other}"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
 
-                <!-- Success message -->
-                <div class="alert alert-success" role="alert" id="success_message">Success <i
-                        class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you
-                    shortly.
-                </div>
+
 
                 <!-- Button -->
                 <div class="form-group">
                     <label class="col-md-4 control-label"></label>
                     <div class="col-md-4">
-                        <button type="submit" class="btn btn-warning">Zapisz<span
+                        <button type="submit" class="btn btn-success">Zapisz<span
                                 class="glyphicon glyphicon-send"></span></button>
-                        <a th:href="@{/deletecar(regNumber=${car.getRegNumber()})}" class="btn btn-danger btn-sm"
+                        <a th:href="@{/showrepairs(regNumber=${car.getRegNumber()})}" class="btn btn-warning btn-sm">
+                            Naprawy
+                        </a>
+                        <a th:if="${!car.isNew()}" th:href="@{/deletecar(regNumber=${car.getRegNumber()})}" class="btn btn-danger btn-sm"
                            onclick="if (!(confirm('Usunąć samochód z bazy danych??'))) return false">
                             Usuń
                         </a>
@@ -452,18 +471,8 @@
 </div>
 
 </div>
+<div th:replace="footer"></div>
 
 
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
 </body>
 </html>
