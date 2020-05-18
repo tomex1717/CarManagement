@@ -21,20 +21,20 @@
             <div class="col-sm-5 card-column" th:each="car : ${cars}">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="'Nr Rej. ' + ${car.getRegNumber()}"></h5>
+                        <h5 class="card-title" th:text="${car.getRegNumber()}" align="center"></h5>
 
                         <div class="row">
                             <div class="col-sm-auto">
                                 <img th:src="@{'/imgs/'+ ${car.getCarPicName()}}" class="carPhoto"  th:if="${car.getCarPicName()}!=null">
                             </div>
                             <div class="col-md-auto card-car-details">
-                                <h5 th:text="'Marka: ' + ${car.getMark()}"></h5>
+                                <label class="col-md-auto control-label" th:text="'Marka: ' + ${car.getMark()}"></label>
                                 <br>
-                                <h5 th:text="'Model: ' + ${car.getModel()}"></h5>
+                                <label class="col-md-auto control-label" th:text="'Model: ' + ${car.getModel()}"></label>
                                 <br>
-                                <h5 th:text="'Ksywka: ' + ${car.getNickname()}"></h5>
+                                <label class="col-md-auto control-label" th:text="'Ksywka: ' + ${car.getNickname()}"></label>
                                 <br>
-                                <h5 th:text="'Uzytkownik: ' + ${car.getUser()}"></h5>
+                                <label class="col-md-auto control-label" th:text="'Uzytkownik: ' + ${car.getUser()}"></label>
 
                             </div>
 

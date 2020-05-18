@@ -57,8 +57,9 @@ main .card {
 }
 
 .card-title{
-    font-style: italic;
-    text-decoration: underline;
+    text-decoration-style: solid;
+    margin-bottom: 20px;
+
 }
 .card-column{
     float: left;
