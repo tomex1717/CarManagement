@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="head-section">
+
+</head>
+
+<body>
+
+<div th:replace="top-nav-bar"></div>
+
+
+<div align="center">
+    <br>
+    <br>
+    <br>
+    <br><br>
+    <br>
+    <br>
+    <br>
+    <h2>Wystąpił błąd</h2>
+    <br>
+
+    <h3 th:text="${error.getMessage()}"></h3>
+    <br>
+    <h3>Jeśli uważasz, że jest to błąd aplikacji, skontaktuj się z devem.</h3>
+    <br>
+    <h3 th:text="'StatusCode: ' + ${error.getStatus()}"></h3>
+    <br>
+    <br>
+    <a th:href="@{/}">Powrót na stronę główną</a>
+
+
+
+
+
+
+
+</div>
+
+</body>
+</html>

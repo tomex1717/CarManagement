@@ -2,6 +2,7 @@ package lufa.alfaserwis.CarManagment.service;
 
 import lufa.alfaserwis.CarManagment.dao.CarRepository;
 import lufa.alfaserwis.CarManagment.entity.Car;
+import lufa.alfaserwis.CarManagment.exceptionHandling.CarNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class CarServiceImpl implements CarService {
         }
         else {
 
-            throw new RuntimeException("Nie znaleziono samochodu o podanym numerze rejestracyjnym" + regNumber);
+            throw new CarNotFoundException("Nie znaleziono samochodu o podanym numerze rejestracyjnym: " + regNumber);
         }
 
 

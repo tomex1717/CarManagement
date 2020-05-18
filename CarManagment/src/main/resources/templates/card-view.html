@@ -18,7 +18,7 @@
             <hr>
             <a th:href="@{/addcar}" class="btn btn-primary btn-sm mb-3">Dodaj samochód</a>
             <div>
-            <div class="col-sm-5 card-column" th:each="car,iter : ${cars}">
+            <div class="col-sm-5 card-column" th:each="car : ${cars}">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" th:text="'Nr Rej. ' + ${car.getRegNumber()}"></h5>

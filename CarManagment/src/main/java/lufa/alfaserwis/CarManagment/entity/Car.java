@@ -146,7 +146,7 @@ public class Car {
     @Transient
     private boolean isNew = false;
 
-//TODO add validation to every field
+
 
 
 

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Zaloguj się</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" th:href="@{/css/login.css}" >
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+
+
+<div class="container login-container">
+    <div class="row">
+        <form th:action="@{/authLogin}" class="col-md-6 login-form-1" method="post">
+
+            <img src="/images/logo-alfa-serwis-g.png" class="alfa-logo">
+
+
+
+                <div class="alert alert-danger col-xs-offset-1 col-xs-10" th:if = "${param.error != null}">
+                    Nieprawidłowy login lub hasło!
+
+                </div>
+
+
+
+                <div class="alert alert-success col-xs-offset-1 col-xs-10" th:if="${param.logout != null}">
+                    Zostałeś wylogowany!
+                </div>
+
+
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Login" name="username" />
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Hasło" name="password" />
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btnSubmit" value="Zaloguj" />
+            </div>
+
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

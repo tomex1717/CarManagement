@@ -19,8 +19,11 @@
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
 
-        <h3 th:if="${carRepair.getId()==0}" th:text="'Dodaj naprawę (' + ${car.getRegNumber()} + ', ' + ${car.getMark()} + ' ' + ${car.getModel()}  +')'"></h3>
-        <h3 th:if="${carRepair.getId()!=0}" th:text="'Edytuj naprawę (' + ${car.getRegNumber()} + ', ' + ${car.getMark()} + ' ' + ${car.getModel()}  +')'"></h3>
+        <h3 th:if="${carRepair.getId()==0}"
+            th:text="'Dodaj naprawę (' + ${car.getRegNumber()} + ', ' + ${car.getMark()} + ' ' + ${car.getModel()}  +')'"></h3>
+
+        <h3 th:if="${carRepair.getId()!=0}"
+            th:text="'Edytuj naprawę (' + ${car.getRegNumber()} + ', ' + ${car.getMark()} + ' ' + ${car.getModel()}  +')'"></h3>
 
         <hr>
 

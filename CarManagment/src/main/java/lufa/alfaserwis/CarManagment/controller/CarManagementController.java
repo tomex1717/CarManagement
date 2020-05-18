@@ -131,9 +131,7 @@ public class CarManagementController {
     @GetMapping("/updatecarrepair")
     public String updateCarRepair(Model model, @RequestParam("id") int id){
         CarRepair carRepair = carRepairService.getById(id);
-
         model.addAttribute("carRepair", carRepair);
-        System.out.println(carRepair.getInvoices().toString());
         Car car = carService.getByRegNumber(carRepair.getRegNumber());
         model.addAttribute("car", car);
         return "car-repair-form";
@@ -145,28 +143,38 @@ public class CarManagementController {
         carRepairService.deleteById(id);
 
         return "redirect:/showrepairs?regNumber=" + regNumber;
-
     }
 
     @GetMapping("/deleteinvoice")
     public String deleteInvoice(Model model, @RequestParam int invoiceId, @RequestParam int carrepairid){
         carRepairService.deleteInvoice(invoiceId);
-
-
-
-
-
-
         return "redirect:/updatecarrepair?id="+ carrepairid;
     }
 
-    @GetMapping("/navbar")
-    public String navbar(){
-        return "top-nav-bar";
+    @PostMapping("/search")
+    public String search(@RequestParam(name = "search") String search, Model model){
+
+        Car car = carService.getByRegNumber(search);
+        model.addAttribute("car", car);
+        return "car-form";
+    }
+
+    @GetMapping("/login")
+    public String loginPage(){
+
+        return "login";
     }
 
 
 
 
-    //TODO add spring serurity
+    //TODO add settings (add account etc.)
+    //TODO change cardview
+    //TODO Bootstrap flex
+
+
+
+
+    //TODO add better searching
+
 }

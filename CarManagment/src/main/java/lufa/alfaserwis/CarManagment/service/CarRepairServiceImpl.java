@@ -135,7 +135,5 @@ public class CarRepairServiceImpl implements CarRepairService {
 
 
 
-    //TODO deleting invoices from db and filesystem
-
 
 }
