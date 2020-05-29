@@ -21,6 +21,10 @@ public class User {
     private String password;
     @Column(name = "enabled")
     private boolean enabled = true;
+    @Transient
+    private String repeatPassword;
+
+
 
     @OneToMany(
             cascade = CascadeType.ALL,

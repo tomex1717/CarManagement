@@ -26,14 +26,17 @@ public class UserController {
 
     @GetMapping("/adduser")
     public String addUser(Model model){
-
         User user = new User();
         model.addAttribute("user", user);
+
         return "add-user";
     }
 
     @PostMapping("/adduser")
     public String addAndSaveUser(@ModelAttribute(name = "user") User user){
+        if(!user.getPassword().equals(user.getRepeatPassword())){
+            return "redirect:/user/adduser?mismatch";
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Authority authority = new Authority();
         authority.setUsername(user.getUsername());
@@ -48,14 +51,16 @@ public class UserController {
     @GetMapping("/resetpassword")
     public String resetPassword(Model model){
         List<User> userList = userService.getAllUsers();
-
         model.addAttribute("users", userList);
 
         return "reset-password";
     }
 
     @PostMapping("/resetpassword")
-    public String resetPassword(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password){
+    public String resetPassword(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password,@RequestParam(name = "repeatpassword") String repeatpassword){
+        if(!password.equals(repeatpassword)){
+            return "redirect:/user/resetpassword?mismatch";
+        }
         User user = userService.findByUserName(username);
         user.setPassword(passwordEncoder.encode(password));
         userService.saveUser(user);

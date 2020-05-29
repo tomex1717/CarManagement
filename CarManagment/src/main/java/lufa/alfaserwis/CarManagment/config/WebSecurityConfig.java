@@ -64,7 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .rememberMe().key("uniqueAndSecret")
                 .and()
-                .exceptionHandling();
+                .exceptionHandling()
+                .accessDeniedPage("/access-denied");
 
 
 

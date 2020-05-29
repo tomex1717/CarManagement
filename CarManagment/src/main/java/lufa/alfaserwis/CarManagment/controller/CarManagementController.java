@@ -48,6 +48,7 @@ public class CarManagementController {
     public String home(Model model){
         List<Car> cars = carService.getAll();
         model.addAttribute("cars",cars);
+
         return "card-view";
     }
 
@@ -55,8 +56,8 @@ public class CarManagementController {
     public String tableView(Model model){
         List<Car> cars = carService.getAll();
         model.addAttribute("cars",cars);
-        return "table-view";
 
+        return "table-view";
     }
 
     @GetMapping("/updatecar")
@@ -116,15 +117,15 @@ public class CarManagementController {
         car.setNew(true);
         car.setCarPicName("car-pic-not-found.webp");
         model.addAttribute(car);
-        return "car-form";
 
+        return "car-form";
     }
 
     @GetMapping("/showrepairs")
     public String showRepairs(Model model, @RequestParam("regNumber") String regNumber){
         model.addAttribute("regNumber" , regNumber);
-
         model.addAttribute("repairs",carRepairService.getByRegNumber(regNumber));
+
         return "repair-view";
     }
 
@@ -135,15 +136,16 @@ public class CarManagementController {
         model.addAttribute("carRepair", carRepair);
         Car car = carService.getByRegNumber(regNumber);
         model.addAttribute("car", car);
+
         return "car-repair-form";
     }
 
     @PostMapping("/saverepair")
-    public String saveRepair(@RequestParam("invoice") MultipartFile invoice, @ModelAttribute(name = "carRepair") CarRepair carRepair){
-
+    public String saveRepair(@RequestParam("invoice") MultipartFile invoice,
+                             @ModelAttribute(name = "carRepair") CarRepair carRepair){
         carRepairService.save(carRepair);
-        return "redirect:/showrepairs?regNumber=" + carRepair.getRegNumber();
 
+        return "redirect:/showrepairs?regNumber=" + carRepair.getRegNumber();
     }
 
     @GetMapping("/updatecarrepair")
@@ -152,6 +154,7 @@ public class CarManagementController {
         model.addAttribute("carRepair", carRepair);
         Car car = carService.getByRegNumber(carRepair.getRegNumber());
         model.addAttribute("car", car);
+
         return "car-repair-form";
     }
 
@@ -164,16 +167,18 @@ public class CarManagementController {
     }
 
     @GetMapping("/deleteinvoice")
-    public String deleteInvoice(Model model, @RequestParam int invoiceId, @RequestParam int carrepairid){
+    public String deleteInvoice(Model model, @RequestParam int invoiceId,
+                                @RequestParam int carrepairid){
         carRepairService.deleteInvoice(invoiceId);
+
         return "redirect:/updatecarrepair?id="+ carrepairid;
     }
 
     @PostMapping("/search")
     public String search(@RequestParam(name = "search") String search, Model model){
-
         Car car = carService.getByRegNumber(search);
         model.addAttribute("car", car);
+
         return "car-form";
     }
 
@@ -187,15 +192,22 @@ public class CarManagementController {
 
 
 
+    // ACCESS DENIED 403 FORBIDDEN
+
+    @GetMapping("/access-denied")
+    public String accessDenied(){
+        return "access-denied";
+    }
+
+
+
+
+
 
 
 
 
     //TODO Bootstrap flex
-
-
-
-
     //TODO add better searching
 
 }

@@ -21,6 +21,9 @@
                 <div class="alert alert-success col-md-3" th:if="${param.success != null}">
                     Dodano użytkownika!
                 </div>
+                <div class="alert alert-danger col-md-3" th:if="${param.mismatch != null}">
+                    Hasła nie zgadzają się
+                </div>
                 <div class="row">
 
                     <div class="form-group">
@@ -45,6 +48,20 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Hasło" class="form-control"
                                        type="password" th:field="*{password}" required>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Powtórz hasło" class="form-control"
+                                       type="password" th:field="*{repeatPassword}" required>
+
 
                             </div>
                         </div>
