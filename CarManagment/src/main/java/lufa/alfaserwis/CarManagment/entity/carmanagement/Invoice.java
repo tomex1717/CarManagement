@@ -1,4 +1,4 @@
-package lufa.alfaserwis.CarManagment.entity;
+package lufa.alfaserwis.CarManagment.entity.carmanagement;
 
 import lombok.Getter;
 import lombok.Setter;

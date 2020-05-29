@@ -1,7 +1,7 @@
 package lufa.alfaserwis.CarManagment.service;
 
-import lufa.alfaserwis.CarManagment.dao.CarRepository;
-import lufa.alfaserwis.CarManagment.entity.Car;
+import lufa.alfaserwis.CarManagment.dao.carmanagement.CarRepository;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
 import lufa.alfaserwis.CarManagment.exceptionHandling.CarNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,10 +1,10 @@
 package lufa.alfaserwis.CarManagment.service;
 
 import lombok.extern.slf4j.Slf4j;
-import lufa.alfaserwis.CarManagment.dao.CarRepairRepository;
-import lufa.alfaserwis.CarManagment.dao.InvoiceRepository;
-import lufa.alfaserwis.CarManagment.entity.CarRepair;
-import lufa.alfaserwis.CarManagment.entity.Invoice;
+import lufa.alfaserwis.CarManagment.dao.carmanagement.CarRepairRepository;
+import lufa.alfaserwis.CarManagment.dao.carmanagement.InvoiceRepository;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.Invoice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

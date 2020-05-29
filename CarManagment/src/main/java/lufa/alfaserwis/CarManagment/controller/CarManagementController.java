@@ -1,7 +1,9 @@
 package lufa.alfaserwis.CarManagment.controller;
 
-import lufa.alfaserwis.CarManagment.entity.Car;
-import lufa.alfaserwis.CarManagment.entity.CarRepair;
+import lufa.alfaserwis.CarManagment.dao.user.UserRepository;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
+import lufa.alfaserwis.CarManagment.entity.user.User;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,17 @@ public class CarManagementController {
 
     private CarService carService;
     private CarRepairService carRepairService;
+    private UserRepository userRepository;
+
     @Autowired
-    public CarManagementController(CarService carService,CarRepairService carRepairService) {
+    public CarManagementController(CarService carService, CarRepairService carRepairService, UserRepository userRepository) {
         this.carService = carService;
         this.carRepairService = carRepairService;
+        this.userRepository = userRepository;
     }
+
+
+
 
     @GetMapping("/")
     public String home(Model model){
@@ -164,6 +172,18 @@ public class CarManagementController {
 
         return "login";
     }
+
+
+    @GetMapping("/adduser")
+    public String addUser(){
+        User user = new User();
+        user.setUsername("gówno");
+        user.setPassword("gówno");
+        user.setEnabled(true);
+        userRepository.save(user);
+        return "redirect:/";
+    }
+
 
 
 

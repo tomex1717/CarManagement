@@ -1,6 +1,6 @@
 package lufa.alfaserwis.CarManagment.service;
 
-import lufa.alfaserwis.CarManagment.entity.Car;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
 
 import java.util.List;
 
