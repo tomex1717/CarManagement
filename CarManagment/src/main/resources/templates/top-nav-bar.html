@@ -32,8 +32,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">GPS Tracking</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Ustawienia</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSettings" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Ustawienia
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" th:href="@{/user/adduser}">Dodaj użytkownika</a>
+                    <a class="dropdown-item" th:href="@{/user/resetpassword}">Resetuj hasło</a>
+
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/logout"> Wyloguj</a>

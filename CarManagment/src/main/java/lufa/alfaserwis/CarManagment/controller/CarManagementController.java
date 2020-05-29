@@ -3,10 +3,10 @@ package lufa.alfaserwis.CarManagment.controller;
 import lufa.alfaserwis.CarManagment.dao.user.UserRepository;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
-import lufa.alfaserwis.CarManagment.entity.user.User;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,19 +20,29 @@ import java.util.List;
 @RequestMapping("/")
 public class CarManagementController {
 
+    // fields
     private CarService carService;
     private CarRepairService carRepairService;
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
+
+
+    // constructors
     @Autowired
-    public CarManagementController(CarService carService, CarRepairService carRepairService, UserRepository userRepository) {
+    public CarManagementController(CarService carService, CarRepairService carRepairService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.carService = carService;
         this.carRepairService = carRepairService;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
 
+
+
+
+    // Mappings
 
     @GetMapping("/")
     public String home(Model model){
@@ -174,22 +184,13 @@ public class CarManagementController {
     }
 
 
-    @GetMapping("/adduser")
-    public String addUser(){
-        User user = new User();
-        user.setUsername("gówno");
-        user.setPassword("gówno");
-        user.setEnabled(true);
-        userRepository.save(user);
-        return "redirect:/";
-    }
 
 
 
 
 
-    //TODO add settings (add account etc.)
-    //TODO change cardview
+
+
     //TODO Bootstrap flex
 
 
