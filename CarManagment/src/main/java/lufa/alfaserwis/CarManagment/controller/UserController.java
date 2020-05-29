@@ -41,7 +41,7 @@ public class UserController {
         user.addAuthority(authority);
         userService.saveUser(user);
 
-        return "redirect:/";
+        return "redirect:/user/adduser?success";
     }
 
 
@@ -61,6 +61,6 @@ public class UserController {
         userService.saveUser(user);
 
 
-        return "redirect:/";
+        return "redirect:/user/resetpassword?success";
     }
 }

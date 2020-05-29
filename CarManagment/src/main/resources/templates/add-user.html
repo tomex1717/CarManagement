@@ -18,7 +18,11 @@
 
                 <!-- Text input-->
                 <h3>Dodaj użytkownika</h3>
+                <div class="alert alert-success col-md-3" th:if="${param.success != null}">
+                    Dodano użytkownika!
+                </div>
                 <div class="row">
+
                     <div class="form-group">
 
                         <label class="col-md-auto control-label">Nazwa użytkownika</label>
