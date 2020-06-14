@@ -28,9 +28,9 @@ public class User {
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            fetch=FetchType.EAGER
+            fetch = FetchType.EAGER,
+            mappedBy = "user"
     )
-    @JoinColumn(name = "username")
     private List<Authority> authorities = new ArrayList<>();
 
     @Transient
@@ -41,6 +41,7 @@ public class User {
 
 
     public void addAuthority(Authority authority){
+
         authority.setAuthority(ROLE_PREFIX+authority.getAuthority());
         authorities.add(authority);
 

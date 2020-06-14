@@ -39,7 +39,7 @@ public class UserController {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Authority authority = new Authority();
-        authority.setUsername(user.getUsername());
+        authority.setUser(user);
         authority.setAuthority(user.getRole());
         user.addAuthority(authority);
         userService.saveUser(user);
@@ -57,15 +57,33 @@ public class UserController {
     }
 
     @PostMapping("/resetpassword")
-    public String resetPassword(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password,@RequestParam(name = "repeatpassword") String repeatpassword){
-        if(!password.equals(repeatpassword)){
+    public String resetPassword(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, @RequestParam(name = "repeatpassword") String repeatpassword) {
+        if (!password.equals(repeatpassword)) {
             return "redirect:/user/resetpassword?mismatch";
         }
         User user = userService.findByUserName(username);
         user.setPassword(passwordEncoder.encode(password));
         userService.saveUser(user);
 
-
         return "redirect:/user/resetpassword?success";
     }
+
+    @GetMapping("/deleteuser")
+    public String deleteUser(Model model) {
+        List<User> userList = userService.getAllUsers();
+        model.addAttribute("users", userList);
+
+        return "delete-user";
+    }
+
+    @PostMapping("/deleteuser")
+    public String deleteUser(@RequestParam(name = "username") String username) {
+
+        User user = userService.findByUserName(username);
+        userService.deleteUser(user);
+
+        return "redirect:/user/deleteuser?success";
+    }
+
+
 }
