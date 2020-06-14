@@ -57,7 +57,8 @@ public class UserController {
     }
 
     @PostMapping("/resetpassword")
-    public String resetPassword(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, @RequestParam(name = "repeatpassword") String repeatpassword) {
+    public String resetPassword(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password,
+                                @RequestParam(name = "repeatpassword") String repeatpassword) {
         if (!password.equals(repeatpassword)) {
             return "redirect:/user/resetpassword?mismatch";
         }
