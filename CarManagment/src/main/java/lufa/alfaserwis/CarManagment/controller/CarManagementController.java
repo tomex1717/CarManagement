@@ -5,6 +5,7 @@ import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
+import lufa.alfaserwis.CarManagment.service.ServerCon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -25,16 +26,18 @@ public class CarManagementController {
     private CarRepairService carRepairService;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private ServerCon serverCon;
 
 
 
     // constructors
     @Autowired
-    public CarManagementController(CarService carService, CarRepairService carRepairService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public CarManagementController(CarService carService, CarRepairService carRepairService, UserRepository userRepository, PasswordEncoder passwordEncoder,ServerCon serverCon) {
         this.carService = carService;
         this.carRepairService = carRepairService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.serverCon = serverCon;
     }
 
 
@@ -199,6 +202,15 @@ public class CarManagementController {
         return "access-denied";
     }
 
+    @GetMapping("/test")
+    public String test(){
+        try{
+            serverCon.start();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return "home";
+    }
 
 
 
