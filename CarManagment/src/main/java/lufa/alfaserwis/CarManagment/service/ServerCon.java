@@ -10,73 +10,94 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 public class ServerCon {
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
+    private ServerSocket serverSocket;
 
     public void start() {
-        String fromclient;
 
-        try{
-            ServerSocket Server = new ServerSocket(12000);
+        try {
+            serverSocket = new ServerSocket(12000);
             System.out.println("TCPServer Waiting for client on port 12000");
-
             while (true) {
-                Socket connected = Server.accept();
-                System.out.println(" THE CLIENT" + " " + connected.getInetAddress()
-                        + ":" + connected.getPort() + " IS CONNECTED ");
-
-
-
-                BufferedReader inFromClient = new BufferedReader(
-                        new InputStreamReader(connected.getInputStream()));
-
-
-                while (true) {
-
-                    fromclient = inFromClient.readLine();
-                    if (fromclient == null) {
-                        connected.close();
-                        System.out.println("Connetcion close due conettion lost");
-                        break;
-                    }
-                    if (fromclient.equals("q")) {
-                        connected.close();
-                        System.out.println("Connetcion close due server teminate connection command");
-                        break;
-                    }
-
-
-                    System.out.println("RECIEVED:");
-                    System.out.println(fromclient);
-                    writeToFile(fromclient);
-
-
-
-
-
-                }
-
+                new EchoClientHandler(serverSocket.accept()).start();
             }
-        } catch (IOException e){
+
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    private void writeToFile(String text){
-        File file = new File("/usr/local/tomcat/webapps/images/file.txt");
-        try(FileWriter fileWriter = new FileWriter(file,true)){
+    public void stop() throws IOException {
+        serverSocket.close();
+    }
 
-            LocalDateTime now = LocalDateTime.now();
+    private static class EchoClientHandler extends Thread {
 
-            fileWriter.write(dtf.format(now)+" ::: " + text);
-            fileWriter.write("\n");
+        // fields
+
+        private Socket clientSocket;
+        private PrintWriter out;
+        private BufferedReader in;
+        private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
+        // constructors
+
+        public EchoClientHandler(Socket socket) {
+            this.clientSocket = socket;
+        }
+
+        public void run() {
+
+            try {
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+                in = new BufferedReader(
+                        new InputStreamReader(clientSocket.getInputStream()));
+
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    if ("quit".equals(inputLine)) {
+                        System.out.println("connection closed due to quit command");
+                        break;
+                    }
+                    if (inputLine == null) {
+                        System.out.println("connection closed due to connetion lost");
+                        break;
+                    }
+                    System.out.println("RECIEVED:");
+                    System.out.println(inputLine);
 
 
-        }catch (IOException e){
-            e.printStackTrace();
+                    writeToFile(inputLine);
+                }
+                in.close();
+                out.close();
+                clientSocket.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+        }
+
+        // private methods
+
+        private void writeToFile(String text) {
+            File file = new File("/usr/local/tomcat/webapps/images/file.txt");
+            try (FileWriter fileWriter = new FileWriter(file, true)) {
+
+                LocalDateTime now = LocalDateTime.now();
+
+                fileWriter.write(dtf.format(now) + " ::: " + text);
+                fileWriter.write("\n");
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }
 
 }
-
