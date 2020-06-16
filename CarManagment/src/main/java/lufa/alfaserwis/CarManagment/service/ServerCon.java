@@ -20,6 +20,7 @@ public class ServerCon {
             System.out.println("TCPServer Waiting for client on port 12000");
             while (true) {
                 new EchoClientHandler(serverSocket.accept()).start();
+
             }
 
 
@@ -48,7 +49,9 @@ public class ServerCon {
         }
 
         public void run() {
-
+            System.out.println("Client connected:");
+            System.out.println("IP: " + clientSocket.getInetAddress());
+            System.out.println("port: " + clientSocket.getPort());
             try {
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(
@@ -60,19 +63,16 @@ public class ServerCon {
                         System.out.println("connection closed due to quit command");
                         break;
                     }
-                    if (inputLine == null) {
-                        System.out.println("connection closed due to connetion lost");
-                        break;
-                    }
+
                     System.out.println("RECIEVED:");
                     System.out.println(inputLine);
-
 
                     writeToFile(inputLine);
                 }
                 in.close();
                 out.close();
                 clientSocket.close();
+                System.out.println("connection closed due to connection close");
 
             } catch (IOException e) {
                 e.printStackTrace();
