@@ -1,5 +1,6 @@
 package lufa.alfaserwis.CarManagment.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -9,9 +10,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public class ServerCon {
+public class ServerConnection {
 
     private ServerSocket serverSocket;
+
+    @Autowired
+    private ReportServiceImpl reportService;
+
 
     public void start() {
 
@@ -19,10 +24,8 @@ public class ServerCon {
             serverSocket = new ServerSocket(12000);
             System.out.println("TCPServer Waiting for client on port 12000");
             while (true) {
-                new EchoClientHandler(serverSocket.accept()).start();
-
+                new EchoClientHandler(serverSocket.accept(), reportService).start();
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,7 +36,8 @@ public class ServerCon {
         serverSocket.close();
     }
 
-    private static class EchoClientHandler extends Thread {
+
+    private class EchoClientHandler extends Thread {
 
         // fields
 
@@ -42,10 +46,14 @@ public class ServerCon {
         private BufferedReader in;
         private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
+        private ReportServiceImpl reportService;
+
+
         // constructors
 
-        public EchoClientHandler(Socket socket) {
+        public EchoClientHandler(Socket socket, ReportServiceImpl reportService) {
             this.clientSocket = socket;
+            this.reportService = reportService;
         }
 
         public void run() {
@@ -66,13 +74,17 @@ public class ServerCon {
 
                     System.out.println("RECIEVED:");
                     System.out.println(inputLine);
+                    System.out.println("------------------------");
 
-                    writeToFile(inputLine);
+                    // save it to db if it contains proper report
+                    if (inputLine.contains("GTFRI")) {
+                        reportService.writeToDb(inputLine);
+                    }
                 }
                 in.close();
                 out.close();
                 clientSocket.close();
-                System.out.println("connection closed due to connection close");
+                System.out.println("connection closed due to connection close by remote client");
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -99,5 +111,6 @@ public class ServerCon {
         }
 
     }
+
 
 }

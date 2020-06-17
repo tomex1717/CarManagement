@@ -1,13 +1,11 @@
 package lufa.alfaserwis.CarManagment.controller;
 
-import lufa.alfaserwis.CarManagment.dao.user.UserRepository;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
-import lufa.alfaserwis.CarManagment.service.ServerCon;
+import lufa.alfaserwis.CarManagment.service.ServerConnection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,24 +22,16 @@ public class CarManagementController {
     // fields
     private CarService carService;
     private CarRepairService carRepairService;
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private ServerCon serverCon;
-
-
+    private ServerConnection serverConnection;
 
     // constructors
     @Autowired
-    public CarManagementController(CarService carService, CarRepairService carRepairService, UserRepository userRepository, PasswordEncoder passwordEncoder,ServerCon serverCon) {
+    public CarManagementController(CarService carService,
+                                   CarRepairService carRepairService, ServerConnection serverConnection) {
         this.carService = carService;
         this.carRepairService = carRepairService;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.serverCon = serverCon;
+        this.serverConnection = serverConnection;
     }
-
-
-
 
 
 
@@ -204,8 +194,9 @@ public class CarManagementController {
 
     @GetMapping("/test")
     public String test(){
-        try{
-            serverCon.start();
+        try {
+            serverConnection.start();
+
         } catch (Exception e){
             e.printStackTrace();
         }
