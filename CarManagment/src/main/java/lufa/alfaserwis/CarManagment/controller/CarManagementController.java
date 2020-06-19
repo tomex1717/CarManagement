@@ -4,6 +4,7 @@ import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
+import lufa.alfaserwis.CarManagment.service.ReportServiceImpl;
 import lufa.alfaserwis.CarManagment.service.ServerConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,13 +25,17 @@ public class CarManagementController {
     private CarRepairService carRepairService;
     private ServerConnection serverConnection;
 
+    private ReportServiceImpl reportService;
+
     // constructors
     @Autowired
     public CarManagementController(CarService carService,
-                                   CarRepairService carRepairService, ServerConnection serverConnection) {
+                                   CarRepairService carRepairService, ServerConnection serverConnection,
+                                   ReportServiceImpl reportService) {
         this.carService = carService;
         this.carRepairService = carRepairService;
         this.serverConnection = serverConnection;
+        this.reportService = reportService;
     }
 
 
@@ -202,12 +207,6 @@ public class CarManagementController {
         }
         return "home";
     }
-
-
-
-
-
-
 
 
     //TODO Bootstrap flex
