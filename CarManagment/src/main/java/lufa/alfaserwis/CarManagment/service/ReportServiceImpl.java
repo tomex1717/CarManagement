@@ -48,6 +48,7 @@ public class ReportServiceImpl {
     @Scheduled(cron = "0 0 3 * * *")
     @Async
     public int deleteRecordsOlderThan() {
+        // deletes rows in reports table older than 14 days, runs every day at 3am
         int days = 14;
         long timestamp = System.currentTimeMillis() - days * 86400000;
         Query q = entityManager.createQuery("DELETE FROM Report s WHERE s.timestamp < :timestamp");
