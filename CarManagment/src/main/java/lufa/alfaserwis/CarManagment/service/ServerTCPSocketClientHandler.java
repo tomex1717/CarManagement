@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public class ServerConnection {
+public class ServerTCPSocketClientHandler {
 
     private ServerSocket serverSocket;
 
