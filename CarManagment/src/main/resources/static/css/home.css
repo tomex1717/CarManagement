@@ -91,12 +91,26 @@ footer{
     height: 20px;
     background-color: #646c72;
     color: white;
-    text-align:center;
-
+    text-align: center;
 
 
     font-size: small;
 }
-.footer-link{
+
+.footer-link {
     color: brown;
+}
+
+.list-group {
+    max-height: 200px;
+    max-width: 100px;
+
+
+}
+
+.list-group-item {
+    max-height: 50px;
+    padding: 0px;
+    margin: 0px;
+    border: none;
 }

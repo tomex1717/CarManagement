@@ -2,6 +2,7 @@ package lufa.alfaserwis.CarManagment.service;
 
 import lombok.extern.slf4j.Slf4j;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.ReportRepository;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.Day;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,6 +16,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +60,7 @@ public class ReportServiceImpl {
         q.setParameter("timestamp", timestamp);
         int deletedRows = q.executeUpdate();
         log.info("Deleted rows on scheduled task: " + deletedRows);
+        entityManager.close();
     }
 
 
@@ -97,6 +101,57 @@ public class ReportServiceImpl {
             return 0;
         }
 
+    }
+
+    public List<Report> getAllReportsByRegNumber(String regNumber) {
+        return reportRepository.findByRegNumber(regNumber);
+
+    }
+
+
+    public List<Day> last14DaysList() {
+        List<Day> dayList = new ArrayList<>();
+        LocalDate localDate = LocalDate.now();
+        while (dayList.size() < 15) {
+            Day day = new Day();
+            day.setDate(localDate.toString());
+            day.setMinTimestamp(Timestamp.valueOf(day.getDate() + " " + "00:00:00").getTime());
+            day.setMaxTimestamp(day.getMinTimestamp() + 86399999);
+            dayList.add(day);
+            localDate = localDate.minusDays(1);
+
+        }
+        return dayList;
+    }
+
+    public List<Report> getReportsOfDay(Day day, String regNumber) {
+        List reportList;
+        System.out.println(day.getMinTimestamp());
+        Query q = entityManager.createQuery(
+                "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between :mintimestamp AND :maxtimestamp  ORDER BY r.timestamp");
+
+
+        q.setParameter("maxtimestamp", day.getMaxTimestamp());
+        q.setParameter("mintimestamp", day.getMinTimestamp());
+        q.setParameter("regnumber", regNumber);
+
+        reportList = q.getResultList();
+        return reportList;
+    }
+
+    public List<Report> getReportsOfDay(long timestamp, String regNumber) {
+        List reportList;
+
+        Query q = entityManager.createQuery(
+                "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between :mintimestamp AND :maxtimestamp  ORDER BY r.timestamp");
+
+
+        q.setParameter("maxtimestamp", timestamp + 86399999);
+        q.setParameter("mintimestamp", timestamp);
+        q.setParameter("regnumber", regNumber);
+
+        reportList = q.getResultList();
+        return reportList;
     }
 
 
