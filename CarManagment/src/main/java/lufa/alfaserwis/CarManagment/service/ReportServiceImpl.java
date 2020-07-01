@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.ReportRepository;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Day;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
@@ -17,10 +19,7 @@ import javax.persistence.Query;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @EnableAsync
@@ -136,6 +135,7 @@ public class ReportServiceImpl {
         q.setParameter("regnumber", regNumber);
 
         reportList = q.getResultList();
+        System.out.println(reportList);
         return reportList;
     }
 
@@ -152,6 +152,20 @@ public class ReportServiceImpl {
 
         reportList = q.getResultList();
         return reportList;
+    }
+
+    public String makeDirectionsAsJsonArray(List<Report> reportList) {
+        JSONArray ja = new JSONArray();
+
+        for (Report report : reportList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.putOpt("lng", report.getLongitude());
+            jsonObject.put("lat", report.getLatitude());
+            ja.put(jsonObject);
+
+        }
+
+        return ja.toString();
     }
 
 

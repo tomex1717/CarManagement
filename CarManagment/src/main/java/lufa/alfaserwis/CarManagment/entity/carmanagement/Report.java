@@ -1,6 +1,7 @@
 package lufa.alfaserwis.CarManagment.entity.carmanagement;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,10 +26,16 @@ public class Report {
     private double speed;
     @Column(name = "altitude")
     private double altitude;
-    @Column(name = "longitude")
-    private double longitude;
+
+    @JsonProperty("lat")
     @Column(name = "latitude")
     private double latitude;
+
+    @JsonProperty("lng")
+    @Column(name = "longitude")
+    private double longitude;
+
+
     @Column(name = "timestamp")
     private long timestamp;
 

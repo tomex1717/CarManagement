@@ -1,11 +1,13 @@
 package lufa.alfaserwis.CarManagment.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -15,25 +17,31 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+@PropertySource("classpath:application.properties")
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
         entityManagerFactoryRef = "carManagementEM",
         transactionManagerRef = "carManagementTM",
         basePackages = {
-        "lufa.alfaserwis.CarManagment.dao.carmanagement" })
+                "lufa.alfaserwis.CarManagment.dao.carmanagement"})
 public class CarManagementDadaSourceConfig {
 
-
+    @Value("${car.datasource.url}")
+    private String carDataSourceURL;
+    @Value("${car.datasource.username}")
+    private String carDataSourceUsername;
+    @Value("${car.datasource.password}")
+    private String carDataSourcePassword;
 
 
     @Bean(name = "carManagementDataSource")
     @Primary
     public DataSource getDataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.url("jdbc:mysql://127.0.0.1:3306/car_management?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC");
-        dataSourceBuilder.username("hbstudent");
-        dataSourceBuilder.password("hbstudent");
+        dataSourceBuilder.url(carDataSourceURL);
+        dataSourceBuilder.username(carDataSourceUsername);
+        dataSourceBuilder.password(carDataSourcePassword);
         return dataSourceBuilder.build();
     }
 
@@ -47,6 +55,7 @@ public class CarManagementDadaSourceConfig {
                 .persistenceUnit("CarManagementPU")
                 .build();
     }
+
     @Primary
     @Bean(name = "carManagementTM")
     public PlatformTransactionManager transactionManager(
