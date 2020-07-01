@@ -30,6 +30,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUserName(String username) {
-       return userRepository.getOne(username);
+        return userRepository.getOne(username);
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        userRepository.deleteById(username);
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 }

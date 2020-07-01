@@ -17,14 +17,12 @@ public class Authority {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "username")
-    private String username;
     @Column(name = "authority")
     private String authority;
 
-
-
-
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private User user;
 
 
 }
