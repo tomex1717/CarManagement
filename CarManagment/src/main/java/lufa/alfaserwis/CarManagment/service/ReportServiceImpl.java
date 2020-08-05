@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -47,6 +50,21 @@ public class ReportServiceImpl {
 
 
     }
+
+    public void writeToFileWholeReport(String report) {
+        File file = new File("/usr/local/tomcat/webapps/images/file.txt");
+        try {
+            FileWriter fileWriter = new FileWriter(file, true);
+            fileWriter.write(report);
+            fileWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     @Transactional
     @Scheduled(cron = "0 0 3 * * *")
