@@ -153,7 +153,7 @@ public class ReportServiceImpl {
 
     public List<Report> getReportsOfDay(Day day, String regNumber) {
         List reportList;
-        System.out.println(day.getMinTimestamp());
+
         Query q = entityManager.createQuery(
                 "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between :mintimestamp AND :maxtimestamp  ORDER BY r.timestamp");
 
@@ -163,7 +163,7 @@ public class ReportServiceImpl {
         q.setParameter("regnumber", regNumber);
 
         reportList = q.getResultList();
-        System.out.println(reportList);
+
         return reportList;
     }
 

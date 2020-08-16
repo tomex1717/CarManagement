@@ -1,7 +1,7 @@
 package lufa.alfaserwis.CarManagment.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -25,21 +25,20 @@ import javax.sql.DataSource;
         basePackages = {
                 "lufa.alfaserwis.CarManagment.dao.user"})
 public class UserDataSourceConfig {
+    private YAMLConfig config;
 
-    @Value("${user.datasource.url}")
-    private String userDataSourceURL;
-    @Value("${user.datasource.username}")
-    private String userDataSourceUsername;
-    @Value("${user.datasource.password}")
-    private String userDataSourcePassword;
+    @Autowired
+    public UserDataSourceConfig(YAMLConfig config) {
+        this.config = config;
+    }
 
 
     @Bean(name = "usersDataSource")
     public DataSource dataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.url(userDataSourceURL);
-        dataSourceBuilder.username(userDataSourceUsername);
-        dataSourceBuilder.password(userDataSourcePassword);
+        dataSourceBuilder.url(config.getUserDataSourceUrl());
+        dataSourceBuilder.username(config.getUserDataSourceUsername());
+        dataSourceBuilder.password(config.getUserDataSourcePassword());
         return dataSourceBuilder.build();
     }
 
