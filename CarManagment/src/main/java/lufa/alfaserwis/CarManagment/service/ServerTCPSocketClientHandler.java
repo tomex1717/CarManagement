@@ -1,5 +1,6 @@
 package lufa.alfaserwis.CarManagment.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 @Component
+@Slf4j
 public class ServerTCPSocketClientHandler {
 
     private ServerSocket serverSocket;
@@ -15,15 +17,18 @@ public class ServerTCPSocketClientHandler {
     @Autowired
     private ReportServiceImpl reportService;
 
+    private long numberOfConnectedClients = 0;
 
     public void start() {
 
 
         try {
             serverSocket = new ServerSocket(12000);
-            System.out.println("TCPServer Waiting for client on port 12000");
+            log.info("TCPServer Waiting for client on port 12000");
             while (true) {
                 new EchoClientHandler(serverSocket.accept(), reportService).start();
+                numberOfConnectedClients++;
+                log.info("Clients connected: " + numberOfConnectedClients);
             }
 
         } catch (IOException e) {
@@ -79,12 +84,16 @@ public class ServerTCPSocketClientHandler {
                     if (inputLine.contains("GTFRI")) {
                         reportService.writeToDb(inputLine);
                     }
-                    writeToFile(inputLine);
+                    reportService.writeToFileWholeReport(inputLine);
                 }
+                numberOfConnectedClients--;
+
                 in.close();
                 out.close();
                 clientSocket.close();
-                System.out.println("connection closed due to connection close by remote client");
+                log.info("connection closed due to connection close by remote client");
+                numberOfConnectedClients--;
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -94,20 +103,7 @@ public class ServerTCPSocketClientHandler {
 
         // private methods
 
-        private void writeToFile(String text) {
-            File file = new File("/usr/local/tomcat/webapps/images/file.txt");
-            try (FileWriter fileWriter = new FileWriter(file, true)) {
-
-
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
 
     }
-
 
 }
