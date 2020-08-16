@@ -10,7 +10,7 @@ import java.net.Socket;
 
 @Component
 @Slf4j
-public class ServerTCPSocketClientHandler {
+public class ServerTCPSocketClientHandler implements Runnable {
 
     private ServerSocket serverSocket;
 
@@ -19,7 +19,8 @@ public class ServerTCPSocketClientHandler {
 
     private long numberOfConnectedClients = 0;
 
-    public void start() {
+
+    public void run() {
 
 
         try {
@@ -54,7 +55,7 @@ public class ServerTCPSocketClientHandler {
 
 
         // constructors
-
+        @Autowired
         public EchoClientHandler(Socket socket, ReportServiceImpl reportService) {
             this.clientSocket = socket;
             this.reportService = reportService;

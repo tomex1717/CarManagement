@@ -13,12 +13,15 @@ import javax.annotation.PostConstruct;
 @Slf4j
 public class CarManagmentApplication {
 
-    private static ServerTCPSocketClientHandler serverTCPSocketClientHandler;
+    private static ServerTCPSocketClientHandler server;
+
 
     @PostConstruct
     private static void startTCPServer() {
         try {
-            serverTCPSocketClientHandler.start();
+            Thread thread = new Thread(server);
+            thread.start();
+
         } catch (Exception e) {
             log.error("THERE WAS AN ERROR WITH STARTING TCP SERVER");
             e.printStackTrace();
@@ -28,13 +31,11 @@ public class CarManagmentApplication {
 
     @Autowired
     public CarManagmentApplication(ServerTCPSocketClientHandler serverTCPSocketClientHandler) {
-        this.serverTCPSocketClientHandler = serverTCPSocketClientHandler;
+        this.server = serverTCPSocketClientHandler;
     }
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(CarManagmentApplication.class, args);
-
-
 
     }
 
