@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.ReportRepository;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Day;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
+import lufa.alfaserwis.utils.Paths;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,12 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @EnableAsync
@@ -52,11 +58,15 @@ public class ReportServiceImpl {
     }
 
     public void writeToFileWholeReport(String report) {
-        File file = new File("/usr/local/tomcat/webapps/images/file.txt");
-        try {
-            FileWriter fileWriter = new FileWriter(file, true);
-            fileWriter.write(report);
-            fileWriter.close();
+        File file = new File(Paths.REPORT_FILE_PATH);
+
+        try (FileWriter fileWriter = new FileWriter(file, true)) {
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+
+            fileWriter.write(dtf.format(now) + " ::: " + report);
+            fileWriter.write("\n");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,8 +80,8 @@ public class ReportServiceImpl {
     @Scheduled(cron = "0 0 3 * * *")
     @Async
     public void deleteRecordsOlderThan() {
-        // deletes rows in reports table older than 14 days, runs every day at 3am
-        int days = 14;
+        // deletes rows in reports table older than 90 days, runs every day at 3am
+        int days = 90;
         long timestamp = System.currentTimeMillis() - days * 86400000;
         Query q = entityManager.createQuery("DELETE FROM Report s WHERE s.timestamp < :timestamp");
         q.setParameter("timestamp", timestamp);

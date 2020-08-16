@@ -197,17 +197,6 @@ public class CarManagementController {
         return "access-denied";
     }
 
-    @GetMapping("/test")
-    public String test(){
-        try {
-            serverTCPSocketClientHandler.start();
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return "home";
-    }
-
 
     //TODO Bootstrap flex
     //TODO add better searching

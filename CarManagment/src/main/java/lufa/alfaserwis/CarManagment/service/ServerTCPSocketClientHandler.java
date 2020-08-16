@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class ServerTCPSocketClientHandler {
@@ -19,6 +17,7 @@ public class ServerTCPSocketClientHandler {
 
 
     public void start() {
+
 
         try {
             serverSocket = new ServerSocket(12000);
@@ -44,7 +43,7 @@ public class ServerTCPSocketClientHandler {
         private Socket clientSocket;
         private PrintWriter out;
         private BufferedReader in;
-        private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
 
         private ReportServiceImpl reportService;
 
@@ -80,6 +79,7 @@ public class ServerTCPSocketClientHandler {
                     if (inputLine.contains("GTFRI")) {
                         reportService.writeToDb(inputLine);
                     }
+                    writeToFile(inputLine);
                 }
                 in.close();
                 out.close();
@@ -98,10 +98,7 @@ public class ServerTCPSocketClientHandler {
             File file = new File("/usr/local/tomcat/webapps/images/file.txt");
             try (FileWriter fileWriter = new FileWriter(file, true)) {
 
-                LocalDateTime now = LocalDateTime.now();
 
-                fileWriter.write(dtf.format(now) + " ::: " + text);
-                fileWriter.write("\n");
 
 
             } catch (IOException e) {
