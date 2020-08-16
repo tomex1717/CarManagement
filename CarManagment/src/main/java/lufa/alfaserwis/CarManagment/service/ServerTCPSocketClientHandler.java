@@ -96,6 +96,7 @@ public class ServerTCPSocketClientHandler {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                numberOfConnectedClients--;
 
             }
         }
