@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.annotation.PostConstruct;
+
 
 @SpringBootApplication
 @Slf4j
@@ -13,19 +15,7 @@ public class CarManagmentApplication {
 
     private static ServerTCPSocketClientHandler serverTCPSocketClientHandler;
 
-    @Autowired
-    public CarManagmentApplication(ServerTCPSocketClientHandler serverTCPSocketClientHandler) {
-        this.serverTCPSocketClientHandler = serverTCPSocketClientHandler;
-    }
-
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(CarManagmentApplication.class, args);
-
-        startTCPServer();
-
-
-    }
-
+    @PostConstruct
     private static void startTCPServer() {
         try {
             serverTCPSocketClientHandler.start();
@@ -35,6 +25,20 @@ public class CarManagmentApplication {
         }
 
     }
+
+    @Autowired
+    public CarManagmentApplication(ServerTCPSocketClientHandler serverTCPSocketClientHandler) {
+        this.serverTCPSocketClientHandler = serverTCPSocketClientHandler;
+    }
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(CarManagmentApplication.class, args);
+
+
+
+    }
+
+
 
 
 }
