@@ -86,7 +86,6 @@ public class ServerTCPSocketClientHandler {
                     }
                     reportService.writeToFileWholeReport(inputLine);
                 }
-                numberOfConnectedClients--;
 
                 in.close();
                 out.close();
