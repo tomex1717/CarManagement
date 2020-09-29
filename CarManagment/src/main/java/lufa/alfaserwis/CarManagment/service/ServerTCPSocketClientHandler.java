@@ -4,7 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -22,18 +25,22 @@ public class ServerTCPSocketClientHandler implements Runnable {
 
     public void run() {
 
-
+        Socket socket = new Socket();
         try {
             serverSocket = new ServerSocket(12000);
+
             log.info("TCPServer Waiting for client on port 12000");
             while (true) {
-                new EchoClientHandler(serverSocket.accept(), reportService).start();
+                socket.setSoTimeout(5000);
+                socket = serverSocket.accept();
+                new EchoClientHandler(socket, reportService).start();
                 numberOfConnectedClients++;
                 log.info("Clients connected: " + numberOfConnectedClients);
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn(e.getMessage());
+
         }
     }
 
