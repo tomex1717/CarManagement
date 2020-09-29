@@ -9,11 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -24,11 +21,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @EnableAsync
@@ -76,19 +71,19 @@ public class ReportServiceImpl {
     }
 
 
-    @Transactional
-    @Scheduled(cron = "0 0 3 * * *")
-    @Async
-    public void deleteRecordsOlderThan() {
-        // deletes rows in reports table older than 90 days, runs every day at 3am
-        int days = 90;
-        long timestamp = System.currentTimeMillis() - days * 86400000;
-        Query q = entityManager.createQuery("DELETE FROM Report s WHERE s.timestamp < :timestamp");
-        q.setParameter("timestamp", timestamp);
-        int deletedRows = q.executeUpdate();
-        log.info("Deleted rows on scheduled task: " + deletedRows);
-        entityManager.close();
-    }
+//    @Transactional
+//    @Scheduled(cron = "0 0 3 * * *")
+//    @Async
+//    public void deleteRecordsOlderThan() {
+//        // deletes rows in reports table older than 90 days, runs every day at 3am
+//        int days = 90;
+//        long timestamp = System.currentTimeMillis() - days * 86400000;
+//        Query q = entityManager.createQuery("DELETE FROM Report s WHERE s.timestamp < :timestamp");
+//        q.setParameter("timestamp", timestamp);
+//        int deletedRows = q.executeUpdate();
+//        log.info("Deleted rows on scheduled task: " + deletedRows);
+//        entityManager.close();
+//    }
 
 
     private List<String> getReportAsList(String report) {
@@ -117,14 +112,20 @@ public class ReportServiceImpl {
 
 
     private long covertStringToTimeStampMillis(String date) {
+        // Converts DateAndTime string in report to timestamp in polish TimeZone
         try {
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date parsedDate = dateFormat.parse(date);
-            Timestamp timestamp = new Timestamp(parsedDate.getTime());
+            LocalDateTime localDateTime = parsedDate.toInstant().atZone(ZoneId.of("Poland")).toLocalDateTime();
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            System.out.println(timestamp);
 
             return timestamp.getTime();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error converting date to timestamp:");
+            log.error(e.getMessage());
             return 0;
         }
 
