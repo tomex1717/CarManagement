@@ -190,6 +190,7 @@ public class ReportServiceImpl {
             JSONObject jsonObject = new JSONObject();
             jsonObject.putOpt("lng", report.getLongitude());
             jsonObject.put("lat", report.getLatitude());
+            jsonObject.put("timestamp", report.getTimestamp());
             ja.put(jsonObject);
 
         }
