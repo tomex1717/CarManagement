@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="head-section">
+<head th:insert="head-section :: head-section-fragment">
 
 </head>
 <body>
 
-<nav th:replace="top-nav-bar"></nav>
+<nav th:replace="top-nav-bar.html :: top-nav-bar"></nav>
 
 <main role="main" class="col-md-9 mainContainer">
     <div class="container-fluid">
@@ -100,7 +100,7 @@
 
     </div>
 </main>
-<footer th:replace="footer"></footer>
+<footer th:replace="footer.html :: footer"></footer>
 
 
 </body>

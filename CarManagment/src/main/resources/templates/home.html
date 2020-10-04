@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="head-section">
+<head th:insert="head-section :: head-section-fragment">
 
 </head>
 <body>
 
 <!--   TopNavBar-->
-<div th:replace="top-nav-bar"></div>
+<div th:insert="top-nav-bar.html :: top-nav-bar"></div>
 
 
 

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="head-section">
+<head th:insert="head-section :: head-section-fragment">
 
 </head>
 <body>
-<div th:replace="top-nav-bar"></div>
+<nav th:insert="top-nav-bar.html :: top-nav-bar"></nav>
 <div class="card-view">
 
 
@@ -75,6 +75,6 @@
 
 </div>
 
-<footer th:replace="footer"></footer>
+<footer th:replace="footer.html :: footer"></footer>
 </body>
 </html>

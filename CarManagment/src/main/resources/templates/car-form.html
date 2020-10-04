@@ -1,20 +1,15 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="head-section">
+<head th:insert="head-section :: head-section-fragment">
 </head>
 <body>
 
 
-<nav th:replace="top-nav-bar">
+<nav th:replace="top-nav-bar.html :: top-nav-bar">
 </nav>
 
 
 <div class="container-fluid">
-
-    <!--    NavBar Section-->
-
-
-
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <form class="well form-horizontal" th:action="@{/savecar}" method="post" id="contact_form" th:object="${car}"
@@ -471,7 +466,7 @@
 </div>
 
 </div>
-<div th:replace="footer"></div>
+<footer th:replace="footer.html :: footer"></footer>
 
 
 </body>

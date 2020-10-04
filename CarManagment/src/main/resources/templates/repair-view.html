@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
-<head th:replace="head-section">
+<head th:insert="head-section :: head-section-fragment">
 
 </head>
 <body>
-<nav th:replace="top-nav-bar">
+<nav th:insert="top-nav-bar.html :: top-nav-bar">
 </nav>
 
 <div class="container-fluid">
@@ -73,6 +73,6 @@
 
 </div>
 
-<div th:replace="footer"></div>
+<footer th:replace="footer.html :: footer"></footer>
 </body>
 </html>

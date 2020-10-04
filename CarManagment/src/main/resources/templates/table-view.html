@@ -15,7 +15,7 @@
 
 <div class="table-view">
 
-    <div th:replace="top-nav-bar"></div>
+    <div th:insert="top-nav-bar.html :: top-nav-bar"></div>
 
     <div class="container-fluid">
 
@@ -75,7 +75,7 @@
 
 
 </div>
-<div th:replace="footer"></div>
+<footer th:replace="footer.html :: footer"></footer>
 </body>
 
 </html>

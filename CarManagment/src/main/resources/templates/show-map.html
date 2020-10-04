@@ -1,29 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head-section">
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <link rel="stylesheet" th:href="@{/css/home.css}">
-    <!--    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>-->
+<th:block th:insert="head-section.html :: head-section-fragment">
 
 
-    <link rel="stylesheet" type="text/css" th:href="@{/css/maps.css}"/>
-
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <title>Car Management Alfa Serwis</title>
-</head>
+</th:block>
 <body>
-<nav th:replace="top-nav-bar">
+<nav th:replace="top-nav-bar :: top-nav-bar">
+
 </nav>
 
 
@@ -46,7 +30,8 @@
                     </div>
                 </div>
             </div>
-
+            <h2>Date Validation Using jQuery Datepicker</h2>
+            <p>Date: <input type="text" id="datepicker"></p>
 
             <!--GOOGLE MAPS-->
             <div id="map"></div>
@@ -64,57 +49,33 @@
 
 </div>
 
-<footer th:replace="footer"></footer>
-
-</body>
+<!--to nie dziala-->
 <script type="text/javascript" th:inline="javascript">
 
-    var map;
-    var directionsString = [[${reportArray}]];
+    /*<![CDATA[*/
 
-    var jsonVar = JSON.parse(directionsString);
+    $(function () {
+        $("#datepicker").datepicker();
+    });
 
-    function initMap() {
+    /*]]>*/
 
-        map = new google.maps.Map(document.getElementById("map"), {
-
-            center: {lat: jsonVar[0].lat, lng: jsonVar[0].lng},
-            zoom: 12
-        });
-
-        var routePath = new google.maps.Polyline({
-            path: jsonVar,
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-        });
-        routePath.setMap(map);
-
-    }
-
-
-    var slider = document.getElementById("myRange");
-    var output = document.getElementById("hourIndicator");
-    output.innerHTML = '00' + ':' + '00' // Display the default slider value
-
-    // Update the current slider value (each time you drag the slider handle)
-    slider.oninput = function () {
-        var hours = Math.floor(slider.value / 60);
-        var minutes = slider.value - (hours * 60);
-
-        if (hours.toString().length == 1) hours = '0' + hours;
-        if (minutes.toString().length == 1) minutes = '0' + minutes;
-
-
-        output.innerHTML = hours + ':' + minutes;
-
-
-    }
-
+    // $( document ).ready(function() {
+    //     $( '#datepicker' )._showDatepicker();
+    // });
 
 </script>
+
+<!--<footer th:replace="footer.html :: footer"></footer>-->
+</body>
+
+
+<script th:inline="javascript">
+    var directionsStringTl = [[${reportArray}]];
+</script>
+<script src="/js/show-map.js"></script>
+
 <script async defer
-        th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${apikey} + '&callback=initMap'">
-</script>
+        th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${apikey} + '&callback=initMap'"></script>
+
 </html>
