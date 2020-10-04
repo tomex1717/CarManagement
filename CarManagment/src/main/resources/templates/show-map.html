@@ -16,25 +16,10 @@
 
         <div class="row">
 
-            <div class="dropdown">
-                <button class="btn btn-success dropdown-toggle" type="button"
-                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false" th:text="${dayList.get(0).getDate()}">
-
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <div th:each="day : ${dayList}">
-                        <a class="dropdown-item"
-                           th:href="@{/gps/showmap(regNumber=${regnumber},timestamp=${day.getMinTimestamp()})}"
-                           th:text="${day.getDate()}"></a>
-                    </div>
-                </div>
-            </div>
-            <h2>Date Validation Using jQuery Datepicker</h2>
-            <p>Date: <input type="text" id="datepicker"></p>
+            <div id="datepicker"></div>
 
             <!--GOOGLE MAPS-->
-            <div id="map"></div>
+            <div id="map"><h2 id="noReportsMessage"></h2></div>
 
 
             <!--HOUR SLIDER BELOW MAPS-->
@@ -49,31 +34,20 @@
 
 </div>
 
-<!--to nie dziala-->
-<script type="text/javascript" th:inline="javascript">
 
-    /*<![CDATA[*/
-
-    $(function () {
-        $("#datepicker").datepicker();
-    });
-
-    /*]]>*/
-
-    // $( document ).ready(function() {
-    //     $( '#datepicker' )._showDatepicker();
-    // });
-
-</script>
-
-<!--<footer th:replace="footer.html :: footer"></footer>-->
+<footer th:replace="footer.html :: footer"></footer>
 </body>
 
 
+<!--assigning variables from thymeleaf to js -->
 <script th:inline="javascript">
     var directionsStringTl = [[${reportArray}]];
+    var regNumberTl = [[${regnumber}]];
 </script>
+
+<!--js scripts-->
 <script src="/js/show-map.js"></script>
+<script src="/js/datepicker.js" type="text/javascript" th:inline="javascript"></script>
 
 <script async defer
         th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${apikey} + '&callback=initMap'"></script>

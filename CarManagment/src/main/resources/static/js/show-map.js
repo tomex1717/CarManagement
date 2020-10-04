@@ -1,6 +1,9 @@
 var map;
 var directionsString = directionsStringTl;
 
+if (directionsStringTl) {
+    document.getElementById("noReportsMessage").innerText = "Brak raportów dla danego dnia, wybierz inny dzień";
+}
 var jsonVar = JSON.parse(directionsString);
 
 function initMap() {
