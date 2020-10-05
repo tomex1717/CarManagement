@@ -59,7 +59,7 @@ public class ReportServiceImpl {
     }
 
     public void writeToFileWholeReport(String report) {
-        File file = new File(config.getPhotosPath());
+        File file = new File(config.getReportFilePath());
 
         try (FileWriter fileWriter = new FileWriter(file, true)) {
 
