@@ -27,4 +27,11 @@ public class YAMLConfig {
     private String googleMapsApiKey;
 
     private String loggingFileName;
+    private String photosPath;
+    private String invoicesPath;
+    private String reportFilePath;
+    private String loggingFilePath;
+
+
 }
+

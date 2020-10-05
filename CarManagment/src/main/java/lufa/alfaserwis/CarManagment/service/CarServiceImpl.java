@@ -1,5 +1,6 @@
 package lufa.alfaserwis.CarManagment.service;
 
+import lufa.alfaserwis.CarManagment.config.YAMLConfig;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.CarRepository;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
 import lufa.alfaserwis.CarManagment.exceptionHandling.CarNotFoundException;
@@ -16,10 +17,12 @@ import java.util.Optional;
 public class CarServiceImpl implements CarService {
 
     private CarRepository carRepository;
+    private YAMLConfig config;
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository) {
+    public CarServiceImpl(CarRepository carRepository, YAMLConfig config) {
         this.carRepository = carRepository;
+        this.config = config;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class CarServiceImpl implements CarService {
 
                 // Get the file and save it somewhere
                 byte[] bytes = car.getCarPic().getBytes();
-                Path path = Paths.get(lufa.alfaserwis.utils.Paths.PHOTO_PATH + car.getCarPic().getOriginalFilename());
+                Path path = Paths.get(config.getPhotosPath() + car.getCarPic().getOriginalFilename());
                 car.setCarPicName(car.getCarPic().getOriginalFilename());
                 car.setCarPicPath(path.toString());
                 Files.write(path, bytes);

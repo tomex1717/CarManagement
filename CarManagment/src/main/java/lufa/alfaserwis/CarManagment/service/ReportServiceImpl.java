@@ -1,10 +1,10 @@
 package lufa.alfaserwis.CarManagment.service;
 
 import lombok.extern.slf4j.Slf4j;
+import lufa.alfaserwis.CarManagment.config.YAMLConfig;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.ReportRepository;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Day;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
-import lufa.alfaserwis.utils.Paths;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @EnableAsync
@@ -32,11 +35,14 @@ public class ReportServiceImpl {
 
     private ReportRepository reportRepository;
     private EntityManager entityManager;
+    private YAMLConfig config;
 
     @Autowired
-    public ReportServiceImpl(ReportRepository reportRepository, @Qualifier("carManagementEM") EntityManager entityManager) {
+    public ReportServiceImpl(ReportRepository reportRepository, @Qualifier("carManagementEM") EntityManager entityManager,
+                             YAMLConfig config) {
         this.reportRepository = reportRepository;
         this.entityManager = entityManager;
+        this.config = config;
 
     }
 
@@ -53,7 +59,7 @@ public class ReportServiceImpl {
     }
 
     public void writeToFileWholeReport(String report) {
-        File file = new File(Paths.REPORT_FILE_PATH);
+        File file = new File(config.getPhotosPath());
 
         try (FileWriter fileWriter = new FileWriter(file, true)) {
 

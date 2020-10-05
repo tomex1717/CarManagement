@@ -1,6 +1,7 @@
 package lufa.alfaserwis.CarManagment.service;
 
 import lombok.extern.slf4j.Slf4j;
+import lufa.alfaserwis.CarManagment.config.YAMLConfig;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.CarRepairRepository;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.InvoiceRepository;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
@@ -21,14 +22,17 @@ public class CarRepairServiceImpl implements CarRepairService {
 //    fields
     private CarRepairRepository carRepairRepository;
     private InvoiceRepository invoiceRepository;
+    private YAMLConfig config;
 
 
 //    constructors
 
     @Autowired
-    public CarRepairServiceImpl(CarRepairRepository carRepairRepository, InvoiceRepository invoiceRepository) {
+    public CarRepairServiceImpl(CarRepairRepository carRepairRepository, InvoiceRepository invoiceRepository,
+                                YAMLConfig config) {
         this.carRepairRepository = carRepairRepository;
         this.invoiceRepository = invoiceRepository;
+        this.config = config;
     }
 
 
@@ -55,7 +59,7 @@ public class CarRepairServiceImpl implements CarRepairService {
 
                 // Get the file and save it somewhere
                 byte[] bytes = carRepair.getInvoice().getBytes();
-                Path path = Paths.get(lufa.alfaserwis.utils.Paths.INVOICES_PATH + carRepair.getInvoice().getOriginalFilename());
+                Path path = Paths.get(config.getInvoicesPath() + carRepair.getInvoice().getOriginalFilename());
                 Invoice invoice = new Invoice();
                 invoice.setFileName(carRepair.getInvoice().getOriginalFilename());
                 carRepair.addInvoice(invoice);
@@ -112,11 +116,11 @@ public class CarRepairServiceImpl implements CarRepairService {
 
         Invoice invoice = getInvoiceById(id);
         try{
-            Files.delete(Paths.get(lufa.alfaserwis.utils.Paths.INVOICES_PATH+invoice.getFileName()));
+            Files.delete(Paths.get(config.getInvoicesPath() + invoice.getFileName()));
 
         } catch (IOException e){
             log.error("nie można usunąć faktury");
-            System.out.println(Paths.get(lufa.alfaserwis.utils.Paths.INVOICES_PATH+invoice.getFileName()));
+            System.out.println(Paths.get(config.getInvoicesPath() + invoice.getFileName()));
         }
 
         invoiceRepository.delete(invoice);
