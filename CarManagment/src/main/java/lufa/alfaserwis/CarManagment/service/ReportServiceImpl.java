@@ -115,9 +115,11 @@ public class ReportServiceImpl {
         // Converts DateAndTime string in report to timestamp in polish TimeZone
         try {
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+//            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date parsedDate = dateFormat.parse(date);
+            System.out.println(date);
             LocalDateTime localDateTime = parsedDate.toInstant().atZone(ZoneId.of("Poland")).toLocalDateTime();
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             System.out.println(timestamp);

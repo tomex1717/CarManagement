@@ -46,3 +46,15 @@
     background: #4CAF50; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
+
+.ui-datepicker-today a.ui-state-highlight {
+    border-color: #ff0000;
+
+    color: #ff0000;
+}
+
+.ui-datepicker-today.ui-datepicker-current-day a.ui-state-highlight {
+    border-color: #00ff00;
+
+    color: #d1d300;
+}
