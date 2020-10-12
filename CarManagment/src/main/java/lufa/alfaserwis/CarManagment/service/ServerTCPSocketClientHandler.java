@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -42,6 +39,16 @@ public class ServerTCPSocketClientHandler implements Runnable {
             log.warn(e.getMessage());
 
         }
+//        try{
+//
+//            ServerSocket newSocket = new ServerSocket(11000);
+//            Socket socket1 = newSocket.accept();
+//
+//
+//
+//        } catch (IOException e){
+//
+//        }
     }
 
     public void stop() throws IOException {
@@ -113,5 +120,44 @@ public class ServerTCPSocketClientHandler implements Runnable {
 
 
     }
+
+//    private class BinaryDataClientHandler extends Thread{
+//
+//        private Socket clientSocket;
+//        private BufferedReader bufferedReader;
+//        private ReportServiceImpl reportService;
+//
+//
+//        @Autowired
+//        public BinaryDataClientHandler(Socket clientSocket,  ReportServiceImpl reportService) {
+//            this.clientSocket = clientSocket;
+//            this.reportService = reportService;
+//        }
+//
+//        @Override
+//        public void run() {
+//            try{
+//                DataInputStream dataInputStream= new DataInputStream());
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//            } catch (IOException e){
+//                log.error(e.getMessage());
+//            }
+//        }
+//
+//
+//
+//
+//
+//
+//
+//    }
 
 }
