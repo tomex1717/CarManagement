@@ -3,7 +3,6 @@ package lufa.alfaserwis.CarManagment.service;
 import lombok.extern.slf4j.Slf4j;
 import lufa.alfaserwis.CarManagment.config.YAMLConfig;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.ReportRepository;
-import lufa.alfaserwis.CarManagment.entity.carmanagement.Day;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,14 +18,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 @Service
 @EnableAsync
@@ -145,42 +143,15 @@ public class ReportServiceImpl {
     }
 
 
-    public List<Day> last14DaysList() {
-        List<Day> dayList = new ArrayList<>();
-        LocalDate localDate = LocalDate.now();
-        while (dayList.size() < 15) {
-            Day day = new Day();
-            day.setDate(localDate.toString());
-            day.setMinTimestamp(Timestamp.valueOf(day.getDate() + " " + "00:00:00").getTime());
-            day.setMaxTimestamp(day.getMinTimestamp() + 86399999);
-            dayList.add(day);
-            localDate = localDate.minusDays(1);
-
-        }
-        return dayList;
-    }
-
-    public List<Report> getReportsOfDay(Day day, String regNumber) {
-        List reportList;
-
-        Query q = entityManager.createQuery(
-                "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between :mintimestamp AND :maxtimestamp  ORDER BY r.timestamp");
 
 
-        q.setParameter("maxtimestamp", day.getMaxTimestamp());
-        q.setParameter("mintimestamp", day.getMinTimestamp());
-        q.setParameter("regnumber", regNumber);
 
-        reportList = q.getResultList();
-
-        return reportList;
-    }
 
     public List<Report> getReportsOfDay(long timestamp, String regNumber) {
-        List reportList;
+        List<Report> reportList;
 
         Query q = entityManager.createQuery(
-                "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between :mintimestamp AND :maxtimestamp  ORDER BY r.timestamp");
+                "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between :mintimestamp AND :maxtimestamp  ORDER BY r.timestamp ASC");
 
 
         q.setParameter("maxtimestamp", timestamp + 86399999);
@@ -188,23 +159,113 @@ public class ReportServiceImpl {
         q.setParameter("regnumber", regNumber);
 
         reportList = q.getResultList();
+
+        Report previousReport = new Report();
+        long timeCount = 0;
+        int route = 1;
+
+        boolean routeIncremented = true;
+
+
+        ListIterator<Report> listIterator = reportList.listIterator();
+        if (!reportList.isEmpty()) {
+            previousReport = reportList.get(0);
+        }
+        while (listIterator.hasNext()) {
+            Report report = listIterator.next();
+
+
+            if (report.getLatitude().equals(previousReport.getLatitude()) &&
+                    report.getLongitude().equals(previousReport.getLongitude())) {
+
+
+                if (timeCount == 0) {
+                    timeCount = previousReport.getTimestamp();
+                }
+
+
+                if (report.getTimestamp() > timeCount + 600000) {
+
+
+                    if (!routeIncremented) {
+                        route++;
+                        routeIncremented = true;
+
+                    }
+
+
+                } else {
+                    report.setRouteNumber(route);
+                }
+
+
+            } else {
+                if (routeIncremented) {
+                    listIterator.previous();
+                    Report report1 = listIterator.previous();
+                    report1.setRouteNumber(route);
+
+                    listIterator.next();
+                    listIterator.next();
+
+                }
+
+                routeIncremented = false;
+                timeCount = 0;
+                report.setRouteNumber(route);
+
+
+            }
+            previousReport = report;
+
+        }
+
+
         return reportList;
     }
 
     public String makeDirectionsAsJsonArray(List<Report> reportList) {
-        JSONArray ja = new JSONArray();
 
-        for (Report report : reportList) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.putOpt("lng", report.getLongitude());
-            jsonObject.put("lat", report.getLatitude());
-            jsonObject.put("timestamp", report.getTimestamp());
-            ja.put(jsonObject);
+        JSONArray allRoutes = new JSONArray();
+        JSONArray routeArray = new JSONArray();
+        Report cacheReport = new Report();
 
+
+        ListIterator<Report> listIterator = reportList.listIterator();
+        if (listIterator.hasNext()) {
+            cacheReport = listIterator.next();
+        }
+        while (listIterator.hasNext()) {
+            Report report = listIterator.next();
+
+            if ((report.getRouteNumber().equals(cacheReport.getRouteNumber())) && (report.getRouteNumber() != 0)) {
+                routeArray.put(makeJsonObject(
+                        cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp()));
+
+            } else {
+                routeArray.put(makeJsonObject(
+                        report.getLongitude(), report.getLatitude(), report.getTimestamp()));
+
+                if (routeArray.length() > 1) {
+                    allRoutes.put(routeArray);
+                }
+
+                routeArray = new JSONArray();
+            }
+
+            cacheReport = report;
         }
 
-        return ja.toString();
+        return allRoutes.toString();
     }
 
+    private JSONObject makeJsonObject(double lng, double lat, long timestamp) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.putOpt("lng", lng);
+        jsonObject.put("lat", lat);
+        jsonObject.put("timestamp", timestamp);
+        return jsonObject;
+    }
 
 }
+

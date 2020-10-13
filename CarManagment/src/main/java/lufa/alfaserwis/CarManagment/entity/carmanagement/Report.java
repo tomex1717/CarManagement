@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import javax.persistence.*;
 
 @Entity
@@ -29,15 +28,31 @@ public class Report {
 
     @JsonProperty("lat")
     @Column(name = "latitude")
-    private double latitude;
+    private Double latitude;
 
     @JsonProperty("lng")
     @Column(name = "longitude")
-    private double longitude;
+    private Double longitude;
 
 
     @Column(name = "timestamp")
-    private long timestamp;
+    private Long timestamp;
+
+    @Transient
+    private Integer routeNumber = 0;
 
 
+    @Override
+    public String toString() {
+        return "Report{" +
+                "id=" + id +
+
+
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", timestamp=" + timestamp +
+                ", routeNumber=" + routeNumber +
+
+                '}';
+    }
 }
