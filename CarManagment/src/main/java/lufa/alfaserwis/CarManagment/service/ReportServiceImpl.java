@@ -146,12 +146,14 @@ public class ReportServiceImpl {
 
 
 
+    // fetching report of the day of given regNumber and dividing into routes (setting route number to entity(Transient data))
 
     public List<Report> getReportsOfDay(long timestamp, String regNumber) {
         List<Report> reportList;
 
         Query q = entityManager.createQuery(
-                "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between :mintimestamp AND :maxtimestamp  ORDER BY r.timestamp ASC");
+                "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between " +
+                        ":mintimestamp AND :maxtimestamp  ORDER BY r.timestamp ASC");
 
 
         q.setParameter("maxtimestamp", timestamp + 86399999);
@@ -166,7 +168,6 @@ public class ReportServiceImpl {
 
         boolean routeIncremented = true;
 
-
         ListIterator<Report> listIterator = reportList.listIterator();
         if (!reportList.isEmpty()) {
             previousReport = reportList.get(0);
@@ -174,10 +175,8 @@ public class ReportServiceImpl {
         while (listIterator.hasNext()) {
             Report report = listIterator.next();
 
-
             if (report.getLatitude().equals(previousReport.getLatitude()) &&
                     report.getLongitude().equals(previousReport.getLongitude())) {
-
 
                 if (timeCount == 0) {
                     timeCount = previousReport.getTimestamp();
@@ -186,18 +185,15 @@ public class ReportServiceImpl {
 
                 if (report.getTimestamp() > timeCount + 600000) {
 
-
                     if (!routeIncremented) {
                         route++;
                         routeIncremented = true;
-
                     }
 
 
                 } else {
                     report.setRouteNumber(route);
                 }
-
 
             } else {
                 if (routeIncremented) {
@@ -207,23 +203,20 @@ public class ReportServiceImpl {
 
                     listIterator.next();
                     listIterator.next();
-
                 }
 
                 routeIncremented = false;
                 timeCount = 0;
                 report.setRouteNumber(route);
-
-
             }
             previousReport = report;
-
         }
-
 
         return reportList;
     }
 
+
+    // making jsonArray for js script. Dividing routes into smaller jsonArrays and adding them to allRoute jsonArray.
     public String makeDirectionsAsJsonArray(List<Report> reportList) {
 
         JSONArray allRoutes = new JSONArray();

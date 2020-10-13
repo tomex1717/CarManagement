@@ -19,8 +19,15 @@ function initMap() {
         zoom: 16
     });
 
+    //color palette for route drawing, explicit since random color sometimes were almost same
+    // and it was hard to distinguish routes. Tried to pick up contrast colors
     var colorPalette = ["#ff0000", "#ffff00", "#00ff00", "#080808", "#0000FF", "#800080", "#1ABC9C"
+        , "#F2D7D5", "#DC7633", "#A3E4D7", "#717D7E", "#641E16", "#A3E4D7", "#F9E79F", "#EAECEE", "#6E2C00", "#D6EAF8", "#17202A",
+        "#ff0000", "#ffff00", "#00ff00", "#080808", "#0000FF", "#800080", "#1ABC9C"
+        , "#F2D7D5", "#DC7633", "#A3E4D7", "#717D7E", "#641E16", "#A3E4D7", "#F9E79F", "#EAECEE", "#6E2C00", "#D6EAF8", "#17202A",
+        "#ff0000", "#ffff00", "#00ff00", "#080808", "#0000FF", "#800080", "#1ABC9C"
         , "#F2D7D5", "#DC7633", "#A3E4D7", "#717D7E", "#641E16", "#A3E4D7", "#F9E79F", "#EAECEE", "#6E2C00", "#D6EAF8", "#17202A"];
+
 
     for (let i = 0; i < Object.keys(jsonVar).length; i++) {
 
