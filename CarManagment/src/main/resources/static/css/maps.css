@@ -66,3 +66,8 @@
 .infowindow-data {
     font-style: italic;
 }
+
+.infowindow-date {
+    font-weight: bolder;
+    font-style: normal;
+}

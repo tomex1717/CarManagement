@@ -150,10 +150,10 @@ function initMap() {
                         '</div>' +
                         '<div class="infowindow-header">Początek:</div>' +
                         '<div class="infowindow-data">' + result +
-                        '<br>godz:' + new Date(startRoute.timestamp).toLocaleTimeString() + '</div>' +
+                        '<br>' + '<div class="infowindow-date">godz:  ' + new Date(startRoute.timestamp).toLocaleTimeString() + '</div></div>' +
                         '<div class="infowindow-header">Koniec:</div>' +
                         '<div class="infowindow-data">' + result1 +
-                        '<br>godz: ' + new Date(endRoute.timestamp).toLocaleTimeString() + '</div>' +
+                        '<br>' + '<div class="infowindow-date">godz:' + new Date(endRoute.timestamp).toLocaleTimeString() + '</div>' +
                         '<div class="infowindow-header">Czas podróży:</div>' +
                         '<div class="infowindow-data">' + time + '</div>' +
 
