@@ -19,12 +19,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 @Service
 @EnableAsync
@@ -123,9 +119,10 @@ public class ReportServiceImpl {
 
 //            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date parsedDate = dateFormat.parse(date);
+
             System.out.println(date);
-            LocalDateTime localDateTime = parsedDate.toInstant().atZone(ZoneId.of("Poland")).toLocalDateTime();
-            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+//
+            Timestamp timestamp = new Timestamp(parsedDate.getTime());
             System.out.println(timestamp);
 
             return timestamp.getTime();
@@ -167,7 +164,7 @@ public class ReportServiceImpl {
         int route = 1;
 
         boolean routeIncremented = true;
-
+        List<Integer> cacheReports = new ArrayList<>();
         ListIterator<Report> listIterator = reportList.listIterator();
         if (!reportList.isEmpty()) {
             previousReport = reportList.get(0);
@@ -178,14 +175,20 @@ public class ReportServiceImpl {
             if (report.getLatitude().equals(previousReport.getLatitude()) &&
                     report.getLongitude().equals(previousReport.getLongitude())) {
 
+                cacheReports.add(listIterator.nextIndex() - 1);
                 if (timeCount == 0) {
                     timeCount = previousReport.getTimestamp();
                 }
 
 
                 if (report.getTimestamp() > timeCount + 600000) {
+                    for (int index : cacheReports) {
+                        reportList.get(index).setRouteNumber(0);
+                    }
 
                     if (!routeIncremented) {
+
+                        cacheReports = new ArrayList<>();
                         route++;
                         routeIncremented = true;
                     }
@@ -197,21 +200,26 @@ public class ReportServiceImpl {
 
             } else {
                 if (routeIncremented) {
+
                     listIterator.previous();
                     Report report1 = listIterator.previous();
                     report1.setRouteNumber(route);
 
                     listIterator.next();
                     listIterator.next();
+                    routeIncremented = false;
                 }
 
-                routeIncremented = false;
+
+                cacheReports = new ArrayList<>();
                 timeCount = 0;
                 report.setRouteNumber(route);
             }
             previousReport = report;
         }
-
+        for (int index : cacheReports) {
+            reportList.get(index).setRouteNumber(0);
+        }
         return reportList;
     }
 
