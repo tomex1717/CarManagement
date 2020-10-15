@@ -58,3 +58,11 @@
 
     color: #d1d300;
 }
+
+.infowindow-header {
+    font-weight: bold;
+}
+
+.infowindow-data {
+    font-style: italic;
+}
