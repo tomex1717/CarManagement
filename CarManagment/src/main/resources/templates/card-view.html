@@ -39,7 +39,7 @@
                             </div>
 
                         </div>
-                        <div class="row">
+                        <div class="row" id="link-list">
                             <a th:href="@{/updatecar(regNumber=${car.getRegNumber()})}"
                                class="btn btn-info btn-sm card-edit-button">
                                 Edytuj
@@ -49,11 +49,24 @@
                                 Naprawy
                             </a>
                             <a th:href="@{/deletecar(regNumber=${car.getRegNumber()})}"
-                               class="btn btn-danger btn-sm card-edit-button"
+                               class="btn btn-danger btn-sm card-edit-button delete-button"
                                onclick="if (!(confirm('Usunąć samochód z bazy danych??'))) return false">
                                 Usuń
                             </a>
-                            <a th:href="@{/gps/showmaplatest(regNumber=${car.getRegNumber()})}"
+                            <!--                            <script type="text/javascript" th:inline="javascript">-->
+                            <!--                                var regNumber = [[${car.getRegNumber()}]].toString();-->
+
+                            <!--                                var a = document.createElement('a');-->
+                            <!--                                a.appendChild(document.createTextNode("GPS"));-->
+                            <!--                                a.title = "GPS";-->
+                            <!--                                a.href="/gps/showmap?regNumber="+regNumber+"&"+"timestamp=" + new Date().getTime();-->
+                            <!--                                a.className = "btn btn-success btn-sm card-edit-button";-->
+
+
+                            <!--                                document.getElementById("link-list").appendChild(a);-->
+                            <!--                            </script>-->
+
+                            <a th:href="@{/gps/showmap(regNumber=${car.getRegNumber()},timestamp=${#dates.createToday().getTime()})}"
                                class="btn btn-success btn-sm card-edit-button">
                                 GPS
                             </a>
