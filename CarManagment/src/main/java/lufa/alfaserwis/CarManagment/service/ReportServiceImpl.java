@@ -245,7 +245,7 @@ public class ReportServiceImpl {
 
             } else {
                 routeArray.put(makeJsonObject(
-                        report.getLongitude(), report.getLatitude(), report.getTimestamp()));
+                        cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp()));
 
                 if (routeArray.length() > 1) {
                     allRoutes.put(routeArray);
@@ -254,8 +254,13 @@ public class ReportServiceImpl {
                 routeArray = new JSONArray();
             }
 
+
             cacheReport = report;
         }
+
+        routeArray.put(makeJsonObject(
+                cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp()));
+        allRoutes.put(routeArray);
 
         return allRoutes.toString();
     }
