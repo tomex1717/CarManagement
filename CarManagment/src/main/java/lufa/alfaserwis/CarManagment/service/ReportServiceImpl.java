@@ -233,6 +233,7 @@ public class ReportServiceImpl {
 
 
         ListIterator<Report> listIterator = reportList.listIterator();
+
         if (listIterator.hasNext()) {
             cacheReport = listIterator.next();
         }
@@ -258,10 +259,11 @@ public class ReportServiceImpl {
             cacheReport = report;
         }
 
-        routeArray.put(makeJsonObject(
-                cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp()));
-        allRoutes.put(routeArray);
-
+        if (!reportList.isEmpty()) {
+            routeArray.put(makeJsonObject(
+                    cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp()));
+            allRoutes.put(routeArray);
+        }
         return allRoutes.toString();
     }
 
