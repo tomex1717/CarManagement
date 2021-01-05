@@ -3,6 +3,7 @@ package lufa.alfaserwis.CarManagment.controller;
 
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
 import lufa.alfaserwis.CarManagment.service.ReportServiceImpl;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -42,6 +43,15 @@ public class GPSController {
 
 
         return "show-map";
+    }
+
+    @GetMapping("/")
+    public String latestPositionAllCars(Model model) {
+        model.addAttribute("apikey", googleMapsAPIKey);
+        List<Report> reportList = reportService.findLatestReportForAllRegNumbers();
+        JSONArray array = new JSONArray(reportList);
+        model.addAttribute("reportArray", array.toString());
+        return "show-latest";
     }
 
 

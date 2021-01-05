@@ -27,6 +27,7 @@ import java.util.*;
 @Slf4j
 public class ReportServiceImpl {
 
+
     private ReportRepository reportRepository;
     private EntityManager entityManager;
     private YAMLConfig config;
@@ -138,9 +139,6 @@ public class ReportServiceImpl {
         return reportRepository.findByRegNumber(regNumber);
 
     }
-
-
-
 
 
     // fetching report of the day of given regNumber and dividing into routes (setting route number to entity(Transient data))
@@ -267,12 +265,46 @@ public class ReportServiceImpl {
         return allRoutes.toString();
     }
 
+
+    public List<Report> findLatestReportForAllRegNumbers() {
+        List<String> listOfRegNumber = findAllRegNumber();
+        List<Report> reports = new ArrayList<>();
+        for (String regNumber : listOfRegNumber) {
+            Report report = getNewestReportByRegNumber(regNumber);
+            if (report != null) {
+                reports.add(report);
+            }
+
+
+        }
+        return reports;
+
+    }
+
+
     private JSONObject makeJsonObject(double lng, double lat, long timestamp) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.putOpt("lng", lng);
         jsonObject.put("lat", lat);
         jsonObject.put("timestamp", timestamp);
         return jsonObject;
+    }
+
+
+    // for now all cars are meant to be placed in only one table, in future imm planning creating table for each car
+    // it'll need to be changed
+
+    private List<String> findAllRegNumber() {
+
+        return reportRepository.findDistinctRegNumber();
+
+
+    }
+
+
+    private Report getNewestReportByRegNumber(String regNumber) {
+        return reportRepository.findFirstByRegNumberOrderByTimestamp(regNumber);
+
     }
 
 }
