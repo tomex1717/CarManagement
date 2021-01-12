@@ -91,9 +91,6 @@ public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable 
                         break;
                     }
 
-                    System.out.println("RECIEVED:");
-                    System.out.println(inputLine);
-                    System.out.println("------------------------");
 
                     // save it to db if it contains proper report
                     if (inputLine.contains("GTFRI")) {

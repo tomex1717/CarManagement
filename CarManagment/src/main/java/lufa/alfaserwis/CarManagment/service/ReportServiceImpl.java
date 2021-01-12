@@ -115,16 +115,9 @@ public class ReportServiceImpl {
     private long covertStringToTimeStampMillis(String date) {
         // Converts DateAndTime string in report to timestamp in polish TimeZone
         try {
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-
-//            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date parsedDate = dateFormat.parse(date);
-
-            System.out.println(date);
-//
             Timestamp timestamp = new Timestamp(parsedDate.getTime());
-            System.out.println(timestamp);
 
             return timestamp.getTime();
         } catch (Exception e) {
