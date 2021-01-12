@@ -179,7 +179,7 @@ function initMap() {
 
 
 // CAR POSITION ON MAP
-
+    var anchor = new google.maps.Point(150, 382);
 
 // car icon
     var car_icon = {
@@ -190,7 +190,7 @@ function initMap() {
 
         strokeWeight: 1,
         scale: .10,
-        anchor: anchor,
+        anchor: anchor
 
     };
 

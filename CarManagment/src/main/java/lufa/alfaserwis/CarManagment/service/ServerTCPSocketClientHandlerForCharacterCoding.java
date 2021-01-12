@@ -10,7 +10,7 @@ import java.net.Socket;
 
 @Component
 @Slf4j
-public class ServerTCPSocketClientHandler implements Runnable {
+public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable {
 
     private ServerSocket serverSocket;
 

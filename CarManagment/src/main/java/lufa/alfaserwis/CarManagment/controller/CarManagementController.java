@@ -5,7 +5,7 @@ import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
 import lufa.alfaserwis.CarManagment.service.ReportServiceImpl;
-import lufa.alfaserwis.CarManagment.service.ServerTCPSocketClientHandler;
+import lufa.alfaserwis.CarManagment.service.ServerTCPSocketClientHandlerForCharacterCoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,18 +23,18 @@ public class CarManagementController {
     // fields
     private CarService carService;
     private CarRepairService carRepairService;
-    private ServerTCPSocketClientHandler serverTCPSocketClientHandler;
+    private ServerTCPSocketClientHandlerForCharacterCoding serverTCPSocketClientHandlerForCharacterCoding;
 
     private ReportServiceImpl reportService;
 
     // constructors
     @Autowired
     public CarManagementController(CarService carService,
-                                   CarRepairService carRepairService, ServerTCPSocketClientHandler serverTCPSocketClientHandler,
+                                   CarRepairService carRepairService, ServerTCPSocketClientHandlerForCharacterCoding serverTCPSocketClientHandlerForCharacterCoding,
                                    ReportServiceImpl reportService) {
         this.carService = carService;
         this.carRepairService = carRepairService;
-        this.serverTCPSocketClientHandler = serverTCPSocketClientHandler;
+        this.serverTCPSocketClientHandlerForCharacterCoding = serverTCPSocketClientHandlerForCharacterCoding;
         this.reportService = reportService;
     }
 

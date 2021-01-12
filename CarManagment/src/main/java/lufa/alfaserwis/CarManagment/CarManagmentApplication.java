@@ -1,7 +1,8 @@
 package lufa.alfaserwis.CarManagment;
 
 import lombok.extern.slf4j.Slf4j;
-import lufa.alfaserwis.CarManagment.service.ServerTCPSocketClientHandler;
+import lufa.alfaserwis.CarManagment.service.ServerTCPSocketClientHandlerForBinaryCoding;
+import lufa.alfaserwis.CarManagment.service.ServerTCPSocketClientHandlerForCharacterCoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,25 +14,39 @@ import javax.annotation.PostConstruct;
 @Slf4j
 public class CarManagmentApplication {
 
-    private static ServerTCPSocketClientHandler server;
+    private static ServerTCPSocketClientHandlerForCharacterCoding asciiTCPServer;
+    private static ServerTCPSocketClientHandlerForBinaryCoding binnaryTCPServer;
 
 
     @PostConstruct
     private static void startTCPServer() {
         try {
-            Thread thread = new Thread(server);
+            Thread thread = new Thread(asciiTCPServer);
             thread.start();
 
         } catch (Exception e) {
-            log.error("THERE WAS AN ERROR WITH STARTING TCP SERVER");
+            log.error("THERE WAS AN ERROR WITH STARTING TCP ASCII SERVER");
             e.printStackTrace();
         }
+
+        try {
+            Thread thread = new Thread(binnaryTCPServer);
+            thread.start();
+            System.out.println("Binnery started");
+
+        } catch (Exception e) {
+            log.error("THERE WAS AN ERROR WITH STARTING TCP BINNARY SERVER");
+            e.printStackTrace();
+        }
+
 
     }
 
     @Autowired
-    public CarManagmentApplication(ServerTCPSocketClientHandler serverTCPSocketClientHandler) {
-        this.server = serverTCPSocketClientHandler;
+    public CarManagmentApplication(ServerTCPSocketClientHandlerForCharacterCoding serverTCPSocketClientHandlerForCharacterCoding,
+                                   ServerTCPSocketClientHandlerForBinaryCoding serverTCPSocketClientHandlerForBinaryCoding) {
+        asciiTCPServer = serverTCPSocketClientHandlerForCharacterCoding;
+        binnaryTCPServer = serverTCPSocketClientHandlerForBinaryCoding;
     }
 
     public static void main(String[] args) throws Exception {
