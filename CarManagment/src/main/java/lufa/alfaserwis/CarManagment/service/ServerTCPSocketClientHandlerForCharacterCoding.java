@@ -32,23 +32,20 @@ public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable 
                 socket = serverSocket.accept();
                 new EchoClientHandler(socket, reportService).start();
                 numberOfConnectedClients++;
-                log.info("Clients connected: " + numberOfConnectedClients);
+                checkNumberOfConnectedClients();
             }
 
         } catch (IOException e) {
             log.warn(e.getMessage());
 
         }
-//        try{
-//
-//            ServerSocket newSocket = new ServerSocket(11000);
-//            Socket socket1 = newSocket.accept();
-//
-//
-//
-//        } catch (IOException e){
-//
-//        }
+
+    }
+
+    private void checkNumberOfConnectedClients() {
+        if (numberOfConnectedClients > 100) {
+            log.warn("Number of connected clients over 100!");
+        }
     }
 
     public void stop() throws IOException {
@@ -76,9 +73,6 @@ public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable 
         }
 
         public void run() {
-            System.out.println("Client connected:");
-            System.out.println("IP: " + clientSocket.getInetAddress());
-            System.out.println("port: " + clientSocket.getPort());
             try {
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(
@@ -102,7 +96,6 @@ public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable 
                 in.close();
                 out.close();
                 clientSocket.close();
-                log.info("connection closed due to connection close by remote client");
                 numberOfConnectedClients--;
 
 
@@ -114,47 +107,6 @@ public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable 
         }
 
         // private methods
-
-
     }
-
-//    private class BinaryDataClientHandler extends Thread{
-//
-//        private Socket clientSocket;
-//        private BufferedReader bufferedReader;
-//        private ReportServiceImpl reportService;
-//
-//
-//        @Autowired
-//        public BinaryDataClientHandler(Socket clientSocket,  ReportServiceImpl reportService) {
-//            this.clientSocket = clientSocket;
-//            this.reportService = reportService;
-//        }
-//
-//        @Override
-//        public void run() {
-//            try{
-//                DataInputStream dataInputStream= new DataInputStream());
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//            } catch (IOException e){
-//                log.error(e.getMessage());
-//            }
-//        }
-//
-//
-//
-//
-//
-//
-//
-//    }
 
 }

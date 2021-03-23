@@ -9,9 +9,9 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -34,18 +34,19 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         try {
             serverSocket = new ServerSocket(12001);
             while (true) {
-                socket.setSoTimeout(5000);
+                socket.setSoTimeout(25000);
                 socket = serverSocket.accept();
                 new EchoClientHandler(socket, reportService).start();
+                System.out.println("Binary Client connected");
                 numberOfConnectedClients++;
-                log.info("Clients connected to binary coding socket: " + numberOfConnectedClients);
+                System.out.println("Clients connected to binary coding socket: " + numberOfConnectedClients);
 
             }
 
 
         } catch (IOException e) {
             log.error("Error handling TCP connection");
-            log.error(String.valueOf(e.getStackTrace()));
+            log.error(e.getMessage(), e);
 
         }
 
@@ -70,9 +71,11 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         // fields
 
         private Socket clientSocket;
-        DataInputStream in;
-        DataOutputStream out;
+        private DataInputStream in;
+        private DataOutputStream out;
         private ReportServiceImpl reportService;
+        private int numberOfDataForResponce;
+        private int numberOfDataForResponce2;
 
 
         // constructors
@@ -94,21 +97,21 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 String imei = readIMEI();
 
                 // TODO: now need to check if IMEI is in db, then send acceptance/
-                respondDueToAcceptation();
+                respondDueToAcceptation(imei);
 
                 // now performing reading data
                 readData();
 
+                acknowledgeDataReception();
 
                 in.close();
                 out.close();
                 clientSocket.close();
-                log.info("connection closed due to connection close by remote client");
                 numberOfConnectedClients--;
 
 
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 numberOfConnectedClients--;
 
             }
@@ -120,7 +123,6 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         private String readIMEI() {
             String imei;
             int imeiLength = readIMEILength();
-            System.out.println("IMEI LENGHT" + imeiLength);
             byte[] imeiBytes = new byte[imeiLength];
             try {
                 for (int i = 0; i < imeiLength; i++) {
@@ -129,50 +131,42 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
 
             } catch (IOException e) {
                 log.error("Error reading imei value from device.");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
 
             }
-
             imei = new String(imeiBytes, StandardCharsets.UTF_8);
-            System.out.println(imei);
-
             return imei;
-
 
         }
 
 
         private short readIMEILength() {
             try {
-                byte[] imeiLenghtBytes = new byte[2];
-                imeiLenghtBytes[0] = in.readByte();
-                imeiLenghtBytes[1] = in.readByte();
-
-                ByteBuffer bb = ByteBuffer.allocate(2);
-                bb.order(ByteOrder.LITTLE_ENDIAN);
-                bb.put(imeiLenghtBytes[0]);
-                bb.put(imeiLenghtBytes[1]);
-                bb.flip();
-
-                return ByteBuffer.wrap(imeiLenghtBytes).getShort();
-
+                return in.readShort();
 
             } catch (IOException e) {
                 log.error("Error reading imei length of connected device.");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 return -1;
             }
 
         }
 
 
-        private void respondDueToAcceptation() {
+        private void respondDueToAcceptation(String imei) {
             try {
-                out.writeByte(1);
+                if (imei != null) {
+                    out.writeByte(1);
+
+                } else {
+                    out.writeByte(0);
+                }
                 out.flush();
-            } catch (IOException e) {
+                TimeUnit.MILLISECONDS.sleep(200);
+
+            } catch (Exception e) {
                 log.error("Error sending positive acceptance response to device");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
 
             }
         }
@@ -181,19 +175,24 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         private void readData() throws SocketException {
             // every AVL packet has 4 zeros bytes at beginning
             try {
-                read4ZeroBytes();
-                int dataLength = readDataLength();
-                readCodecID();
-                int numberOfData = numberOfData();
-                long timestamp = readTimeStamp();
-                int priority = readPriority();
-                GPSElementBinaryCoding gps = readGPSElement();
-                readIOElemets();
-
-
+                if (read4ZeroBytes()) {
+                    int dataLength = readDataLength();
+                    readCodecID();
+                    numberOfDataForResponce = numberOfData();
+                    for (int i = 0; i < numberOfDataForResponce; i++) {
+                        long timestamp = readTimeStamp();
+                        int priority = readPriority();
+                        GPSElementBinaryCoding gps = readGPSElement();
+                        readIOElemets();
+                    }
+                    numberOfDataForResponce2 = numberOfData();
+                    System.out.println(readCRC());
+                } else {
+                    in.close();
+                }
             } catch (Exception e) {
                 log.error("Error receiving AVL data from device");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 e.printStackTrace();
 
             }
@@ -201,16 +200,31 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
 
         }
 
-        private void read4ZeroBytes() {
+        private void acknowledgeDataReception() {
             try {
-                in.readByte();
-                in.readByte();
-                in.readByte();
-                in.readByte();
+                if (numberOfDataForResponce == numberOfDataForResponce2) {
+                    out.writeInt(numberOfDataForResponce);
+                    out.flush();
+                }
+
+            } catch (IOException e) {
+                log.error("Error sending data reception");
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        private boolean read4ZeroBytes() {
+            try {
+                if (in.readInt() == 0) {
+                    return false;
+                }
+                return true;
+
 
             } catch (IOException e) {
                 log.error("Error reading 4 zero bytes");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
+                return false;
             }
 
         }
@@ -218,41 +232,37 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
 
         private int readDataLength() {
             try {
-                ByteBuffer bb = ByteBuffer.allocate(4);
-                bb.put(in.readByte());
-                bb.put(in.readByte());
-                bb.put(in.readByte());
-                bb.put(in.readByte());
-                bb.flip();
-                return bb.getInt();
 
+                return in.readInt();
 
             } catch (IOException e) {
                 log.error("Error reading data length AVL packet");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 return -1;
             }
 
         }
 
-        private void readCodecID() {
+        private byte readCodecID() {
             try {
-                in.readByte();
+
+                return in.readByte();
 
             } catch (IOException e) {
                 log.error("Error reading Codec ID");
-                log.error(e.getMessage());
-
+                log.error(e.getMessage(), e);
+                return -1;
             }
         }
 
         private int numberOfData() {
             try {
-                int numberOfData = in.readByte();
-                return numberOfData;
+
+                return in.readByte();
+
             } catch (IOException e) {
                 log.error("Error reading Number fo Data");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 return -1;
             }
 
@@ -260,102 +270,67 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
 
         private long readTimeStamp() {
             try {
-                //timestamp is 8 Bytes
-                ByteBuffer bb = ByteBuffer.allocate(8);
-                for (int i = 0; i < 8; i++) {
-                    bb.put(in.readByte());
-                }
-                bb.flip();
-                return bb.getLong();
+                return in.readLong();
 
             } catch (IOException e) {
                 log.error("Error during reading timestamp");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 return -1;
             }
         }
 
         private int readPriority() {
             try {
-                int priority = in.readByte();
-                return priority;
+
+                return in.readByte();
 
             } catch (IOException e) {
                 log.error("Error during reading priority");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 return -1;
             }
         }
 
         private GPSElementBinaryCoding readGPSElement() {
-            //                Longitude      Latitude    Altitude   Angle       Satellites   Speed
-//                             4 Bytes        4 Bytes     2 Bytes    2 Bytes     1 Byte      2 Bytes//
-//                GPS Element
-//                0f0ea850 – Longitude 252618832 = 25,2618832º N
-//                209a6900 – Latitude 546990336 = 54,6990336 º E
-//                0094 – Altitude 148 meters
-//                0000 – Angle 214º
-//                12 – 12 Visible sattelites
-//                0000 – 0 km/h speed
 
             try {
                 GPSElementBinaryCoding gps = new GPSElementBinaryCoding();
 
                 // read longitude and latitude
-
                 gps.setLongitude(readLongitudeOrLatitude());
                 gps.setLatitude(readLongitudeOrLatitude());
 
                 // read altitude
-                ByteBuffer bb = ByteBuffer.allocate(2);
-                bb.put(in.readByte());
-                bb.put(in.readByte());
-                bb.flip();
-                gps.setAltitude(bb.getShort());
+                gps.setAltitude(in.readShort());
 
                 // read angle
-                bb = ByteBuffer.allocate(2);
-                bb.put(in.readByte());
-                bb.put(in.readByte());
-                bb.flip();
-                gps.setAngle(bb.getShort());
+                gps.setAngle(in.readShort());
 
                 //read satellites
                 gps.setSatellites(in.readByte());
 
                 // read speed
-                bb = ByteBuffer.allocate(2);
-                bb.put(in.readByte());
-                bb.put(in.readByte());
-                bb.flip();
-                gps.setSpeed(bb.getShort());
+                gps.setSpeed(in.readShort());
 
-
-                System.out.println(gps);
                 return gps;
             } catch (IOException e) {
                 log.error("Error during reading GPS Element data");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 return null;
             }
         }
 
         private float readLongitudeOrLatitude() {
             try {
-                ByteBuffer bb = ByteBuffer.allocate(4);
-                for (int i = 0; i < 4; i++) {
-                    bb.put(in.readByte());
-                }
-                bb.flip();
-                int intValue = bb.getInt();
-                float valueToReturn = intValue;
+
+                float valueToReturn = in.readInt();
                 valueToReturn /= 10000000;
 
                 return valueToReturn;
 
             } catch (IOException e) {
                 log.error("Error during reading longitude/latitude");
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
                 return -1;
             }
         }
@@ -365,97 +340,117 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
             try {
                 // here are IO Elements, for now im only skipping buffer, since i dont need those values for now.
 
-                int IOElementID = in.readByte();
+                byte IOElementID = in.readByte();
+                byte numberOfIOElements = in.readByte();
 
-                System.out.println("IOELEMENTID:  " + IOElementID);
-                int numberOfIOElements = in.readByte();
-                System.out.println("NUMBER OF ALL: " + numberOfIOElements);
-
-                int numberOfIOElementsByte1 = Byte.toUnsignedInt(in.readByte());
-                System.out.println();
-                System.out.print("Number of 1bytes: " + numberOfIOElementsByte1);
-                for (int i = 0; i < numberOfIOElementsByte1; i++) {
-
-                    System.out.println();
-                    int id = Byte.toUnsignedInt(in.readByte());
-                    System.out.print(" ID: " + id);
-                    int value = Byte.toUnsignedInt(in.readByte());
-                    System.out.print(" value: " + value);
-
-                }
-
-                int numberOfIOElementsByte2 = Byte.toUnsignedInt(in.readByte());
-                System.out.println();
-                System.out.print("Number of 2bytes: " + numberOfIOElementsByte2);
-                for (int i = 0; i < numberOfIOElementsByte2; i++) {
-
-                    System.out.println();
-                    System.out.print("IO ID: " + Byte.toUnsignedInt(in.readByte()));
-                    ByteBuffer bb = ByteBuffer.allocate(2);
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.flip();
-                    System.out.print(" value: " + bb.getShort());
-
-                }
-
-                int numberOfIOElementsByte4 = Byte.toUnsignedInt(in.readByte());
-                System.out.println();
-                System.out.print("Number of 4bytes: " + numberOfIOElementsByte4);
-                for (int i = 0; i < numberOfIOElementsByte4; i++) {
-                    System.out.println();
-                    System.out.print("IO ID: " + Byte.toUnsignedInt(in.readByte()));
-                    ByteBuffer bb = ByteBuffer.allocate(4);
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.flip();
-                    System.out.print(" value: " + bb.getInt());
-                }
-
-                int numberOfIOElementsByte8 = Byte.toUnsignedInt(in.readByte());
-                System.out.println();
-                System.out.print("Number of 8bytes: " + numberOfIOElementsByte8);
-                for (int i = 0; i < numberOfIOElementsByte8; i++) {
-                    System.out.println();
-                    System.out.print("IO ID: " + Byte.toUnsignedInt(in.readByte()));
-                    ByteBuffer bb = ByteBuffer.allocate(8);
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.put(in.readByte());
-                    bb.flip();
-                    System.out.print(" value: " + bb.getLong());
-                }
-
-                // numberOfData
-                int numberOfData = in.readByte();
-
-                // crc16  4bytes;
-
-                in.readByte();
-                in.readByte();
-                in.readByte();
-                in.readByte();
-
-
-                // Server acknowledges data reception numberOfData:
-                out.write(numberOfData);
-                out.flush();
+                read1ByteIOElements();
+                read2ByteIOElements();
+                read4ByteIOElements();
+                read8ByteIOElements();
 
 
             } catch (IOException e) {
                 log.error("Error reading IO elements");
-                log.error(e.getMessage());
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
+
             }
 
 
+        }
+
+        private HashMap<Integer, Integer> read1ByteIOElements() {
+            try {
+                byte numberOfIOElementsByte1 = in.readByte();
+                HashMap<Integer, Integer> byte1IOElements = new HashMap<>();
+
+                for (int i = 0; i < numberOfIOElementsByte1; i++) {
+
+                    int id = in.readUnsignedByte();
+                    int value = in.readByte();
+                    byte1IOElements.put(id, value);
+
+                }
+                System.out.println(byte1IOElements);
+                return byte1IOElements;
+            } catch (IOException e) {
+                log.error("Error reading 1Byte IO Elements");
+                log.error(e.getMessage(), e);
+                return null;
+            }
+
+        }
+
+        private HashMap<Integer, Integer> read2ByteIOElements() {
+            try {
+                byte numberOfIOElementsByte2 = in.readByte();
+                HashMap<Integer, Integer> byte2IOElements = new HashMap<>();
+
+                for (int i = 0; i < numberOfIOElementsByte2; i++) {
+
+                    int id = in.readByte();
+                    int value = in.readShort();
+                    byte2IOElements.put(id, value);
+
+                }
+                return byte2IOElements;
+            } catch (IOException e) {
+                log.error("Error reading 2Byte IO Elements");
+                log.error(e.getMessage(), e);
+                return null;
+            }
+
+        }
+
+        private HashMap<Integer, Integer> read4ByteIOElements() {
+            try {
+                byte numberOfIOElementsByte4 = in.readByte();
+                HashMap<Integer, Integer> byte4IOElements = new HashMap<>();
+
+                for (int i = 0; i < numberOfIOElementsByte4; i++) {
+                    int id = in.readByte();
+                    int value = in.readInt();
+                    byte4IOElements.put(id, value);
+
+                }
+                return byte4IOElements;
+            } catch (IOException e) {
+                log.error("Error reading 4Byte IO Elements");
+                log.error(e.getMessage(), e);
+                return null;
+            }
+
+        }
+
+        private HashMap<Integer, Integer> read8ByteIOElements() {
+            try {
+                int numberOfIOElementsByte8 = Byte.toUnsignedInt(in.readByte());
+                HashMap<Integer, Integer> byte8IOElements = new HashMap<>();
+
+                for (int i = 0; i < numberOfIOElementsByte8; i++) {
+                    int id = in.readByte();
+                    int value = (int) in.readLong();
+                    byte8IOElements.put(id, value);
+                }
+                return byte8IOElements;
+
+            } catch (IOException e) {
+                log.error("Error reading 8Byte IO Elements");
+                log.error(e.getMessage(), e);
+                return null;
+            }
+
+        }
+
+        private int readCRC() {
+            // crc16  4bytes;
+            try {
+                return in.readInt();
+
+            } catch (IOException e) {
+                log.error("Error reading CRC");
+                log.error(e.getMessage(), e);
+                return -1;
+            }
         }
 
 

@@ -38,6 +38,9 @@ public class Report {
     @Column(name = "timestamp")
     private Long timestamp;
 
+//    @ManyToOne
+//    private Car car;
+
     @Transient
     private Integer routeNumber = 0;
 

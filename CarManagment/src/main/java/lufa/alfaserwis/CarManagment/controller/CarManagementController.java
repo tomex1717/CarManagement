@@ -63,6 +63,8 @@ public class CarManagementController {
         Car car = carService.getByRegNumber(regNumber);
         model.addAttribute(car);
 
+//        System.out.println(car.getReports());
+
         return "car-form";
     }
 

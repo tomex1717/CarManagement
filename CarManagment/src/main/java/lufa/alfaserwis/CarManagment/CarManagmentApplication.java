@@ -52,6 +52,7 @@ public class CarManagmentApplication {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(CarManagmentApplication.class, args);
 
+
     }
 
 
