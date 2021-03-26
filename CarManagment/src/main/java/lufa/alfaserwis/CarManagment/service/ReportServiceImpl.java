@@ -57,7 +57,7 @@ public class ReportServiceImpl {
     }
 
     public void writeToDb(GPSElementBinaryCoding gps, long timestamp, long imei) {
-
+        System.out.println(makeEntity(gps, timestamp, imei).toString());
         reportRepository.save(makeEntity(gps, timestamp, imei));
 
     }

@@ -79,6 +79,8 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         private int numberOfDataForResponce;
         private int numberOfDataForResponce2;
         private long imei;
+        private GPSElementBinaryCoding gps;
+        private long timestamp;
 
 
         // constructors
@@ -112,6 +114,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 out.close();
                 clientSocket.close();
                 numberOfConnectedClients--;
+                reportService.writeToDb(gps, timestamp, this.imei);
 
 
             } catch (IOException e) {
@@ -174,7 +177,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 }
                 if (isGpsPresentOnList) {
                     out.writeByte(1);
-                    return true;
+
 
                 } else {
                     out.writeByte(0);
@@ -182,7 +185,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 }
                 out.flush();
                 TimeUnit.MILLISECONDS.sleep(200);
-                return false;
+                return isGpsPresentOnList;
 
             } catch (Exception e) {
                 log.error("Error sending positive acceptance response to device");
@@ -201,11 +204,11 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                     readCodecID();
                     numberOfDataForResponce = numberOfData();
                     for (int i = 0; i < numberOfDataForResponce; i++) {
-                        long timestamp = readTimeStamp();
+                        timestamp = readTimeStamp();
                         int priority = readPriority();
-                        GPSElementBinaryCoding gps = readGPSElement();
+                        gps = readGPSElement();
                         readIOElemets();
-                        reportService.writeToDb(gps, timestamp, this.imei);
+
                     }
                     numberOfDataForResponce2 = numberOfData();
                     readCRC();
