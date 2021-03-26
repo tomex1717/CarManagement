@@ -2,7 +2,9 @@ package lufa.alfaserwis.CarManagment.service;
 
 import lombok.extern.slf4j.Slf4j;
 import lufa.alfaserwis.CarManagment.config.YAMLConfig;
+import lufa.alfaserwis.CarManagment.dao.carmanagement.GpsDevicesRepository;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.ReportRepository;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.CarAssignmentToGpsDevice;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,13 +33,15 @@ public class ReportServiceImpl {
     private ReportRepository reportRepository;
     private EntityManager entityManager;
     private YAMLConfig config;
+    private GpsDevicesRepository gpsDevicesRepository;
 
     @Autowired
     public ReportServiceImpl(ReportRepository reportRepository, @Qualifier("carManagementEM") EntityManager entityManager,
-                             YAMLConfig config) {
+                             YAMLConfig config, GpsDevicesRepository gpsDevicesRepository) {
         this.reportRepository = reportRepository;
         this.entityManager = entityManager;
         this.config = config;
+        this.gpsDevicesRepository = gpsDevicesRepository;
 
     }
 
@@ -274,6 +278,11 @@ public class ReportServiceImpl {
 
     }
 
+    public List<CarAssignmentToGpsDevice> getAllGpsDevices() {
+        return gpsDevicesRepository.findAll();
+
+    }
+
 
     private JSONObject makeJsonObject(double lng, double lat, long timestamp) {
         JSONObject jsonObject = new JSONObject();
@@ -299,6 +308,7 @@ public class ReportServiceImpl {
         return reportRepository.findFirstByRegNumberOrderByTimestamp(regNumber);
 
     }
+
 
 }
 

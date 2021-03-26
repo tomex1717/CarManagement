@@ -1,6 +1,7 @@
 package lufa.alfaserwis.CarManagment.service;
 
 import lombok.extern.slf4j.Slf4j;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.CarAssignmentToGpsDevice;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.GPSElementBinaryCoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -155,7 +157,16 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
 
         private void respondDueToAcceptation(String imei) {
             try {
-                if (imei != null) {
+                // check if gpsDevice imei is in DB, if true, accept data from device
+                List<CarAssignmentToGpsDevice> gpsDeviceList = reportService.getAllGpsDevices();
+                boolean isGpsPresentOnList = false;
+                System.out.println(imei);
+                for (CarAssignmentToGpsDevice gpsDevice : gpsDeviceList) {
+                    if (gpsDevice.getGPSImei().equals(imei)) {
+                        isGpsPresentOnList = true;
+                    }
+                }
+                if (isGpsPresentOnList) {
                     out.writeByte(1);
 
                 } else {
