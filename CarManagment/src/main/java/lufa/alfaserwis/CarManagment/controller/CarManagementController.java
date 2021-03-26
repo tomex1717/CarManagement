@@ -1,6 +1,7 @@
 package lufa.alfaserwis.CarManagment.controller;
 
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.CarAssignmentToGpsDevice;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.CarRepair;
 import lufa.alfaserwis.CarManagment.service.CarRepairService;
 import lufa.alfaserwis.CarManagment.service.CarService;
@@ -59,11 +60,12 @@ public class CarManagementController {
     }
 
     @GetMapping("/updatecar")
-    public String carForm(@RequestParam("regNumber") String regNumber, Model model){
+    public String carForm(@RequestParam("regNumber") String regNumber, Model model) {
         Car car = carService.getByRegNumber(regNumber);
         model.addAttribute(car);
+        CarAssignmentToGpsDevice gps = new CarAssignmentToGpsDevice();
+        model.addAttribute("GpsToCar", gps);
 
-//        System.out.println(car.getReports());
 
         return "car-form";
     }
@@ -96,8 +98,10 @@ public class CarManagementController {
             car.setCarPicName("car-pic-not-found.webp");
         }
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getFieldError());
             return "car-form";
         }
+
 
         carService.save(car);
         return "redirect:/";
@@ -114,9 +118,11 @@ public class CarManagementController {
     @GetMapping("/addcar")
     public String addCar(Model model){
         Car car = new Car();
+        CarAssignmentToGpsDevice gps = new CarAssignmentToGpsDevice();
         car.setNew(true);
         car.setCarPicName("car-pic-not-found.webp");
         model.addAttribute(car);
+        model.addAttribute("GpsToCar", gps);
 
         return "car-form";
     }

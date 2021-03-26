@@ -140,6 +140,12 @@ public class Car {
     private String carPicName;
     @Column(name = "pic_path")
     private String carPicPath;
+
+    @OneToOne(cascade = CascadeType.MERGE, mappedBy = "car")
+    @PrimaryKeyJoinColumn
+    private CarAssignmentToGpsDevice gps;
+
+
     @Transient
     private MultipartFile carPic;
 

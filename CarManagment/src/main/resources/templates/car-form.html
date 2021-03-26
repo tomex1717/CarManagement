@@ -66,15 +66,28 @@
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input name="first_name" placeholder="Model" class="form-control" type="text"
                                        th:field="*{model}" required>
-                                <div class="error-message" th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
+                                <div class="error-message" th:if="${#fields.hasErrors('model')}"
+                                     th:errors="*{model}"></div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-auto control-label">IMEI GPSU</label>
+                        <div class="col-md-auto inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Model" class="form-control" type="text"
+                                       th:field="*{gps.GPSImei}">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
 
                         <div class="col-md-4 inputGroupContainer">
                             <div class="input-group">
-
 
 
                             </div>
