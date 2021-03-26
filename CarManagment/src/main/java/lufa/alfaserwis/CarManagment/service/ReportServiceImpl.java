@@ -16,13 +16,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -62,38 +57,6 @@ public class ReportServiceImpl {
 
     }
 
-    public void writeToFileWholeReport(String report) {
-        File file = new File(config.getReportFilePath());
-
-        try (FileWriter fileWriter = new FileWriter(file, true)) {
-
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
-
-            fileWriter.write(dtf.format(now) + " ::: " + report);
-            fileWriter.write("\n");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-
-//    @Transactional
-//    @Scheduled(cron = "0 0 3 * * *")
-//    @Async
-//    public void deleteRecordsOlderThan() {
-//        // deletes rows in reports table older than 90 days, runs every day at 3am
-//        int days = 90;
-//        long timestamp = System.currentTimeMillis() - days * 86400000;
-//        Query q = entityManager.createQuery("DELETE FROM Report s WHERE s.timestamp < :timestamp");
-//        q.setParameter("timestamp", timestamp);
-//        int deletedRows = q.executeUpdate();
-//        log.info("Deleted rows on scheduled task: " + deletedRows);
-//        entityManager.close();
-//    }
 
 
     private List<String> getReportAsList(String report) {

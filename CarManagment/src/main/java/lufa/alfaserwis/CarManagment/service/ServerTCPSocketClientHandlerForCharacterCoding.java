@@ -90,7 +90,7 @@ public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable 
                     if (inputLine.contains("GTFRI")) {
                         reportService.writeToDb(inputLine);
                     }
-                    reportService.writeToFileWholeReport(inputLine);
+
                 }
 
                 in.close();
