@@ -78,6 +78,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         private ReportServiceImpl reportService;
         private int numberOfDataForResponce;
         private int numberOfDataForResponce2;
+        private long imei;
 
 
         // constructors
@@ -97,14 +98,15 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 out = new DataOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
 
                 String imei = readIMEI();
+                this.imei = Long.parseLong(imei);
 
-                // TODO: now need to check if IMEI is in db, then send acceptance/
-                respondDueToAcceptation(imei);
+                // read data only if data reception accepted, otherwise close socket
+                if (respondDueToAcceptation(imei)) {
+                    // now performing reading data
+                    readData();
+                    acknowledgeDataReception();
+                }
 
-                // now performing reading data
-                readData();
-
-                acknowledgeDataReception();
 
                 in.close();
                 out.close();
@@ -155,29 +157,37 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         }
 
 
-        private void respondDueToAcceptation(String imei) {
+        private boolean respondDueToAcceptation(String imei) {
             try {
                 // check if gpsDevice imei is in DB, if true, accept data from device
                 List<CarAssignmentToGpsDevice> gpsDeviceList = reportService.getAllGpsDevices();
+
                 boolean isGpsPresentOnList = false;
-                System.out.println(imei);
+                System.out.println("IMEI: " + imei);
+
                 for (CarAssignmentToGpsDevice gpsDevice : gpsDeviceList) {
                     if (gpsDevice.getGPSImei().equals(imei)) {
                         isGpsPresentOnList = true;
+
                     }
+                    System.out.println(isGpsPresentOnList);
                 }
                 if (isGpsPresentOnList) {
                     out.writeByte(1);
+                    return true;
 
                 } else {
                     out.writeByte(0);
+
                 }
                 out.flush();
                 TimeUnit.MILLISECONDS.sleep(200);
+                return false;
 
             } catch (Exception e) {
                 log.error("Error sending positive acceptance response to device");
                 log.error(e.getMessage(), e);
+                return false;
 
             }
         }
@@ -195,9 +205,10 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                         int priority = readPriority();
                         GPSElementBinaryCoding gps = readGPSElement();
                         readIOElemets();
+                        reportService.writeToDb(gps, timestamp, this.imei);
                     }
                     numberOfDataForResponce2 = numberOfData();
-                    System.out.println(readCRC());
+                    readCRC();
                 } else {
                     in.close();
                 }
@@ -211,25 +222,28 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
 
         }
 
-        private void acknowledgeDataReception() {
+        private boolean acknowledgeDataReception() {
             try {
                 if (numberOfDataForResponce == numberOfDataForResponce2) {
                     out.writeInt(numberOfDataForResponce);
                     out.flush();
-                }
 
+
+                }
+                return true;
             } catch (IOException e) {
                 log.error("Error sending data reception");
                 log.error(e.getMessage(), e);
+                return false;
             }
         }
 
         private boolean read4ZeroBytes() {
             try {
                 if (in.readInt() == 0) {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
 
 
             } catch (IOException e) {
@@ -379,9 +393,8 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                     int id = in.readUnsignedByte();
                     int value = in.readByte();
                     byte1IOElements.put(id, value);
-
                 }
-                System.out.println(byte1IOElements);
+
                 return byte1IOElements;
             } catch (IOException e) {
                 log.error("Error reading 1Byte IO Elements");

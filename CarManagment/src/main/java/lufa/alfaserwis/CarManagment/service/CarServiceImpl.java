@@ -72,6 +72,7 @@ public class CarServiceImpl implements CarService {
 //        save data to db
 
         car.getGps().setCarRegNumber(car.getRegNumber());
+        car.getGps().setCar(car);
         carRepository.save(car);
     }
 

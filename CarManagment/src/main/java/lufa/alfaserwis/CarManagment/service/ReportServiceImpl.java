@@ -5,6 +5,7 @@ import lufa.alfaserwis.CarManagment.config.YAMLConfig;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.GpsDevicesRepository;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.ReportRepository;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.CarAssignmentToGpsDevice;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.GPSElementBinaryCoding;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,11 +50,15 @@ public class ReportServiceImpl {
     public void writeToDb(String report) {
         // convert String report to List first, then make entity object according to fields
         // and corresponding list index
-
         Report reportEntity = makeEntity(getReportAsList(report));
 
         reportRepository.save(reportEntity);
 
+    }
+
+    public void writeToDb(GPSElementBinaryCoding gps, long timestamp, long imei) {
+
+        reportRepository.save(makeEntity(gps, timestamp, imei));
 
     }
 
@@ -112,6 +117,18 @@ public class ReportServiceImpl {
         report.setRegNumber(reportAsList.get(3));
         report.setSpeed(Double.valueOf(reportAsList.get(8)));
 
+        return report;
+    }
+
+    private Report makeEntity(GPSElementBinaryCoding gps, long timestamp, long imei) {
+        Report report = new Report();
+        report.setImei(imei);
+        report.setTimestamp(timestamp);
+        report.setLatitude((double) gps.getLatitude());
+        report.setAltitude(gps.getAltitude());
+        report.setLongitude((double) gps.getLongitude());
+        report.setSpeed(gps.getSpeed());
+        report.setRegNumber("N/A");
         return report;
     }
 
