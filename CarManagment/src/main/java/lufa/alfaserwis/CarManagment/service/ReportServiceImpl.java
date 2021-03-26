@@ -120,17 +120,17 @@ public class ReportServiceImpl {
 
     // fetching report of the day of given regNumber and dividing into routes (setting route number to entity(Transient data))
 
-    public List<Report> getReportsOfDay(long timestamp, String regNumber) {
+    public List<Report> getReportsOfDay(long timestamp, long imei) {
         List<Report> reportList;
 
         Query q = entityManager.createQuery(
-                "SELECT r FROM Report r WHERE r.regNumber = :regnumber AND r.timestamp between " +
+                "SELECT r FROM Report r WHERE r.imei = :imei AND r.timestamp between " +
                         ":mintimestamp AND :maxtimestamp  ORDER BY r.timestamp ASC");
 
 
         q.setParameter("maxtimestamp", timestamp + 86399999);
         q.setParameter("mintimestamp", timestamp);
-        q.setParameter("regnumber", regNumber);
+        q.setParameter("imei", imei);
 
         reportList = q.getResultList();
 

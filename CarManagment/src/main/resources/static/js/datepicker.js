@@ -20,7 +20,7 @@ $(function () {
         dayNamesMin: ["Ni", "Po", "Wt", "Śr", "Cz", "Pt", "So"],
 
         onSelect: function (selected) {
-            var regNumber = regNumberTl;
+            var imeiJS = imei;
             var date = new Date(selected);
 
             // make cookie valid for 1 sec for caching last picked date
@@ -29,7 +29,7 @@ $(function () {
             // store date cookie for keeping selected date after refresh
             document.cookie = "date=" + date + "; expires=" + now.toUTCString() + "; path=/;";
 
-            var url = "/gps/showmap?regNumber=" + regNumber + "&timestamp=" + date.getTime();
+            var url = "/gps/showmap?imei=" + imeiJS + "&timestamp=" + date.getTime();
 
             window.location.assign(url);
         },

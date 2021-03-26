@@ -32,11 +32,11 @@ public class GPSController {
 
 
     @GetMapping("/showmap")
-    public String showMap(Model model, @RequestParam("regNumber") String regNumber, @RequestParam("timestamp") long timestamp) {
+    public String showMap(Model model, @RequestParam("imei") long imei, @RequestParam("timestamp") long timestamp) {
 
 
-        model.addAttribute("regnumber", regNumber);
-        List<Report> reportList = reportService.getReportsOfDay(timestamp, regNumber);
+        model.addAttribute("imei", imei);
+        List<Report> reportList = reportService.getReportsOfDay(timestamp, imei);
         model.addAttribute("apikey", googleMapsAPIKey);
         model.addAttribute("reportArray",
                 reportService.makeDirectionsAsJsonArray(reportList));

@@ -66,7 +66,8 @@
                             <!--                                document.getElementById("link-list").appendChild(a);-->
                             <!--                            </script>-->
 
-                            <a th:href="@{/gps/showmap(regNumber=${car.getRegNumber()},timestamp=${#dates.createToday().getTime()})}"
+                            <a th:if="${car.getGps()!=null and !car.getGps().getGPSImei().isEmpty()}"
+                               th:href="@{/gps/showmap(imei=${car.getGps().getGPSImei()},timestamp=${#dates.createToday().getTime()})}"
                                class="btn btn-success btn-sm card-edit-button">
                                 GPS
                             </a>
