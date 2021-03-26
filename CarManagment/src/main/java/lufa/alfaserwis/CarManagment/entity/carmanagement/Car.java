@@ -141,7 +141,7 @@ public class Car {
     @Column(name = "pic_path")
     private String carPicPath;
 
-    @OneToOne(cascade = CascadeType.MERGE, mappedBy = "car")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "car")
     @PrimaryKeyJoinColumn
     private CarAssignmentToGpsDevice gps;
 
