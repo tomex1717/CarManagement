@@ -304,6 +304,26 @@ public class ReportServiceImpl {
 
     }
 
+    private Report findLatestReportForImei(Long imei) {
+
+        return reportRepository.findLatestReportForImei(imei);
+    }
+
+
+    public Set<Report> findLatestReportForEachGpsImei() {
+        List<CarAssignmentToGpsDevice> gpsList = getAllGpsDevices();
+        Set<Report> reportSet = new HashSet<>();
+        for (CarAssignmentToGpsDevice gps : gpsList) {
+            if (gps.getGPSImei().isEmpty()) {
+                continue;
+            }
+            reportSet.add(findLatestReportForImei(Long.parseLong(gps.getGPSImei())));
+
+        }
+        System.out.println(reportSet.toString());
+        return reportSet;
+    }
+
 
 }
 

@@ -38,6 +38,7 @@ public class Report {
     @Column(name = "timestamp")
     private Long timestamp;
 
+
 //    @ManyToOne
 //    private Car car;
 
@@ -49,7 +50,7 @@ public class Report {
     public String toString() {
         return "Report{" +
                 "id=" + id +
-
+                ", imei=" + imei +
 
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +

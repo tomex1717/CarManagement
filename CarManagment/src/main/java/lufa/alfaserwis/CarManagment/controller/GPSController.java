@@ -54,5 +54,13 @@ public class GPSController {
         return "show-latest";
     }
 
+    @GetMapping("/showall")
+    public String showAllCarsOnMap() {
+        reportService.findLatestReportForEachGpsImei();
+        // TODO make there positions visible on googlemaps
+
+        return "show-map";
+    }
+
 
 }
