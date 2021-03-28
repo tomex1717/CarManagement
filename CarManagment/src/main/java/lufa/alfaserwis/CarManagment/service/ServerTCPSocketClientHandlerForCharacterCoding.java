@@ -80,10 +80,6 @@ public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable 
 
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
-                    if ("quit".equals(inputLine)) {
-                        System.out.println("connection closed due to quit command");
-                        break;
-                    }
 
 
                     // save it to db if it contains proper report

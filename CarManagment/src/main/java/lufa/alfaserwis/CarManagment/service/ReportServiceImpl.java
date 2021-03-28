@@ -47,8 +47,10 @@ public class ReportServiceImpl {
         // and corresponding list index
         Report reportEntity = makeEntity(getReportAsList(report));
 
-        reportRepository.save(reportEntity);
-
+        // save in db when there is imei number on DB
+        if (isGpsInDB(reportEntity.getImei())) {
+            reportRepository.save(reportEntity);
+        }
     }
 
     public void writeToDb(GPSElementBinaryCoding gps, long timestamp, long imei) {
@@ -258,7 +260,20 @@ public class ReportServiceImpl {
 
     }
 
-    public List<CarAssignmentToGpsDevice> getAllGpsDevices() {
+
+    public boolean isGpsInDB(long imei) {
+        List<CarAssignmentToGpsDevice> gpsList = getAllGpsDevices();
+        boolean isPresent = false;
+        for (CarAssignmentToGpsDevice gps : gpsList) {
+            if (gps.getGPSImei().equals(imei)) {
+                isPresent = true;
+            }
+
+        }
+        return isPresent;
+    }
+
+    private List<CarAssignmentToGpsDevice> getAllGpsDevices() {
         return gpsDevicesRepository.findAll();
 
     }
