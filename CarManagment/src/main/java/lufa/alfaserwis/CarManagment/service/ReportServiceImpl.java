@@ -1,5 +1,7 @@
 package lufa.alfaserwis.CarManagment.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import lufa.alfaserwis.CarManagment.config.YAMLConfig;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.GpsDevicesRepository;
@@ -310,7 +312,7 @@ public class ReportServiceImpl {
     }
 
 
-    public Set<Report> findLatestReportForEachGpsImei() {
+    private Set<Report> findLatestReportForEachGpsImei() {
         List<CarAssignmentToGpsDevice> gpsList = getAllGpsDevices();
         Set<Report> reportSet = new HashSet<>();
         for (CarAssignmentToGpsDevice gps : gpsList) {
@@ -320,8 +322,20 @@ public class ReportServiceImpl {
             reportSet.add(findLatestReportForImei(Long.parseLong(gps.getGPSImei())));
 
         }
-        System.out.println(reportSet.toString());
+
         return reportSet;
+    }
+
+    public String makeJsonStringFromLatestReportsSet() {
+        Set<Report> set = findLatestReportForEachGpsImei();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = "";
+        try {
+            jsonString = objectMapper.writeValueAsString(set);
+
+        } catch (JsonProcessingException e) {
+        }
+        return jsonString;
     }
 
 

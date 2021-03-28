@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:insert="head-section.html :: head-section-fragment">
+
+
+</th:block>
+<body>
+<nav th:replace="top-nav-bar :: top-nav-bar">
+
+</nav>
+
+
+<div class="container-fluid">
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+
+        <div class="row">
+
+            <div id="datepicker"></div>
+
+            <!--GOOGLE MAPS-->
+            <div id="map"></div>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<footer th:replace="footer.html :: footer"></footer>
+<img src="/images/caricon.png" hidden="hidden" id="carPosition">
+</body>
+
+
+<!--assigning variables from thymeleaf to js -->
+<script th:inline="javascript">
+    var latestReportListAsJsonTl = [[${latestReportsList}]];
+    console.log(JSON.parse(latestReportListAsJsonTl));
+</script>
+
+<!--js scripts-->
+<script src="/js/show-map-all.js"></script>
+
+
+<script async defer
+        th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${apikey} + '&callback=initMap'"></script>
+
+</html>

@@ -1,6 +1,7 @@
 package lufa.alfaserwis.CarManagment.controller;
 
 
+import lombok.extern.slf4j.Slf4j;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
 import lufa.alfaserwis.CarManagment.service.ReportServiceImpl;
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ import java.util.List;
 @PropertySource("classpath:application.properties")
 @RequestMapping("/gps")
 @Controller
+@Slf4j
 public class GPSController {
 
     private ReportServiceImpl reportService;
@@ -28,7 +30,6 @@ public class GPSController {
     public GPSController(ReportServiceImpl reportService) {
         this.reportService = reportService;
     }
-
 
 
     @GetMapping("/showmap")
@@ -55,11 +56,10 @@ public class GPSController {
     }
 
     @GetMapping("/showall")
-    public String showAllCarsOnMap() {
-        reportService.findLatestReportForEachGpsImei();
-        // TODO make there positions visible on googlemaps
-
-        return "show-map";
+    public String showAllCarsOnMap(Model model) {
+        model.addAttribute("apikey", googleMapsAPIKey);
+        model.addAttribute("latestReportsList", reportService.makeJsonStringFromLatestReportsSet());
+        return "show-map-all";
     }
 
 
