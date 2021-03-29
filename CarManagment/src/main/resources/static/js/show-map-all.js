@@ -1,9 +1,9 @@
 var map;
 
 var reportListAsJson = JSON.parse(latestReportListAsJsonTl);
-
-
 var carPostitionMarker = "/images/carMarker.svg";
+
+var markers = [];
 
 function initMap() {
     var random = Math.floor(Math.random() * Math.floor(reportListAsJson.length - 1));
@@ -38,18 +38,55 @@ function initMap() {
     };
 
 
-    for (let i = 0; i < reportListAsJson.length; i++) {
-        var positionMarker = new google.maps.Marker({
-            position: new google.maps.LatLng(
-                reportListAsJson[i].lat,
-                reportListAsJson[i].lng),
+    function markCarsOnMap(data) {
+        deleteMarkers();
+        for (let i = 0; i < data.length; i++) {
+            let position = new google.maps.LatLng(
+                data[i].lat,
+                data[i].lng);
+            addMarker(position);
+        }
+        setMapOnAll();
+
+    }
+
+
+    var intervalID = window.setInterval(getLatestPositionsAllCarsEvery5SecondsAndDrawPositions, 5000);
+
+    markCarsOnMap(reportListAsJson);
+
+
+    async function getLatestPositionsAllCarsEvery5SecondsAndDrawPositions() {
+
+        let response = await fetch("/api/gps/latestpositionallcars");
+        let data = await response.json();
+        markCarsOnMap(data);
+        console.log(data);
+
+    }
+
+    function setMapOnAll() {
+        for (let i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    function clearMarkers() {
+        setMapOnAll(null);
+    }
+
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+
+    function addMarker(location) {
+        const marker = new google.maps.Marker({
+            position: location,
+            map: map,
             icon: car_icon,
-
-            map: map
-
-
         });
-
+        markers.push(marker);
     }
 
 
