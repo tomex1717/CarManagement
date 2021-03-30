@@ -76,9 +76,9 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         private ReportServiceImpl reportService;
         private int numberOfDataForResponce;
         private int numberOfDataForResponce2;
-        private long imei;
-        private GPSElementBinaryCoding gps;
-        private long timestamp;
+        private long imei = 0;
+        private GPSElementBinaryCoding gps = new GPSElementBinaryCoding();
+        private long timestamp = 0;
 
 
         // constructors
@@ -112,7 +112,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 out.close();
                 clientSocket.close();
                 numberOfConnectedClients--;
-                reportService.writeToDb(gps, timestamp, this.imei);
+                reportService.writeToDb(this.gps, this.timestamp, this.imei);
 
 
             } catch (IOException e) {
@@ -163,9 +163,10 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 // check if gpsDevice imei is in DB, if true, accept data from device
 
                 boolean isGpsPresentOnList = reportService.isGpsInDB(Long.parseLong(imei));
-
+                System.out.println(imei);
                 if (isGpsPresentOnList) {
                     out.writeByte(1);
+
 
 
                 } else {
@@ -193,10 +194,12 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                     readCodecID();
                     numberOfDataForResponce = numberOfData();
                     for (int i = 0; i < numberOfDataForResponce; i++) {
-                        timestamp = readTimeStamp();
+                        this.timestamp = readTimeStamp();
                         int priority = readPriority();
-                        gps = readGPSElement();
+                        this.gps = readGPSElement();
+
                         readIOElemets();
+
 
                     }
                     numberOfDataForResponce2 = numberOfData();
@@ -311,7 +314,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         private GPSElementBinaryCoding readGPSElement() {
 
             try {
-                GPSElementBinaryCoding gps = new GPSElementBinaryCoding();
+                gps = new GPSElementBinaryCoding();
 
                 // read longitude and latitude
                 gps.setLongitude(readLongitudeOrLatitude());

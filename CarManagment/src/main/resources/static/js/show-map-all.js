@@ -5,7 +5,7 @@ var carPostitionMarker = "/images/carMarker.svg";
 
 var markers = [];
 
-function initMap() {
+function initMap(listener) {
     var random = Math.floor(Math.random() * Math.floor(reportListAsJson.length - 1));
     map = new google.maps.Map(document.getElementById("map"), {
 
@@ -39,14 +39,21 @@ function initMap() {
 
 
     function markCarsOnMap(data) {
-        deleteMarkers();
+        setMapOnAll(null);
+        markers = [];
+
         for (let i = 0; i < data.length; i++) {
+
             let position = new google.maps.LatLng(
                 data[i].lat,
                 data[i].lng);
-            addMarker(position);
+            addMarker(position, data[i]);
+
+
         }
-        setMapOnAll();
+
+
+        setMapOnAll(map);
 
     }
 
@@ -59,15 +66,18 @@ function initMap() {
     async function getLatestPositionsAllCarsEvery5SecondsAndDrawPositions() {
 
         let response = await fetch("/api/gps/latestpositionallcars");
-        let data = await response.json();
+        var data = await response.json();
         markCarsOnMap(data);
         console.log(data);
 
     }
 
-    function setMapOnAll() {
+    function setMapOnAll(map) {
+
+
         for (let i = 0; i < markers.length; i++) {
             markers[i].setMap(map);
+
         }
     }
 
@@ -80,14 +90,50 @@ function initMap() {
         markers = [];
     }
 
-    function addMarker(location) {
+    function addMarker(location, markerData) {
         const marker = new google.maps.Marker({
             position: location,
             map: map,
+            title: markerData.regNumber,
             icon: car_icon,
         });
+
+        let toolTip = '<div id="map-box">' +
+            '<div id="siteNotice">' +
+            '</div>' +
+            '<div class="infowindow-header">Nr Rej.: </div>' + markerData.regNumber +
+            '<br>' + '<br>' +
+            '<div class="infowindow-header">Prędkość: </div>' + markerData.speed
+        ;
+
+
+        const infowindow = new google.maps.InfoWindow({
+            content: toolTip
+        });
+
+        marker.addListener("click", () => {
+            infowindow.open(map, marker);
+        });
+
         markers.push(marker);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

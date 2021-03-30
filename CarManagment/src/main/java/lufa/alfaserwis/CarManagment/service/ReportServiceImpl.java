@@ -267,7 +267,7 @@ public class ReportServiceImpl {
         List<CarAssignmentToGpsDevice> gpsList = getAllGpsDevices();
         boolean isPresent = false;
         for (CarAssignmentToGpsDevice gps : gpsList) {
-            if (gps.getGPSImei().equals(imei)) {
+            if (Long.parseLong(gps.getGPSImei()) == imei) {
                 isPresent = true;
             }
 
