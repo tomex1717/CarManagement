@@ -1,17 +1,19 @@
 package lufa.alfaserwis.CarManagment.entity.carmanagement;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "reports")
 @Getter
 @Setter
-public class Report {
+public class Report implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +40,15 @@ public class Report {
     @Column(name = "timestamp")
     private Long timestamp;
 
-
-//    @ManyToOne
-//    private Car car;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            insertable = false,
+            updatable = false,
+            name = "imei",
+            referencedColumnName = "gps_imei"
+    )
+    private CarAssignmentToGpsDevice gps;
 
     @Transient
     private Integer routeNumber = 0;

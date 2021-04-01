@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import lufa.alfaserwis.CarManagment.config.YAMLConfig;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.GpsDevicesRepository;
 import lufa.alfaserwis.CarManagment.dao.carmanagement.ReportRepository;
+import lufa.alfaserwis.CarManagment.entity.carmanagement.Car;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.CarAssignmentToGpsDevice;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.GPSElementBinaryCoding;
 import lufa.alfaserwis.CarManagment.entity.carmanagement.Report;
@@ -275,7 +276,7 @@ public class ReportServiceImpl {
         return isPresent;
     }
 
-    private List<CarAssignmentToGpsDevice> getAllGpsDevices() {
+    public List<CarAssignmentToGpsDevice> getAllGpsDevices() {
         return gpsDevicesRepository.findAll();
 
     }
@@ -318,24 +319,58 @@ public class ReportServiceImpl {
         for (CarAssignmentToGpsDevice gps : gpsList) {
             if (gps.getGPSImei().isEmpty()) {
                 continue;
+            } else {
+                reportSet.add(findLatestReportForImei(Long.parseLong(gps.getGPSImei())));
             }
-            reportSet.add(findLatestReportForImei(Long.parseLong(gps.getGPSImei())));
 
         }
-
         return reportSet;
     }
 
+
     public String makeJsonStringFromLatestReportsSet() {
         Set<Report> set = findLatestReportForEachGpsImei();
+
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = "";
         try {
             jsonString = objectMapper.writeValueAsString(set);
 
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            e.getMessage();
         }
         return jsonString;
+    }
+
+    public CarAssignmentToGpsDevice findGpsByImei(long imei) {
+        List<CarAssignmentToGpsDevice> gpsList = gpsDevicesRepository.findAll();
+        for (CarAssignmentToGpsDevice gps : gpsList) {
+            if (!gps.getGPSImei().isEmpty()) {
+                if (Long.parseLong(gps.getGPSImei()) == imei) {
+
+                    return gps;
+                }
+            }
+
+        }
+
+
+        throw new NoSuchElementException();
+
+    }
+
+    public String makeJsonForInfoWindowFromCarObject(Car car) {
+        JSONObject object = new JSONObject();
+        object.put("regNumber", car.getRegNumber());
+        object.put("user", car.getUser());
+        object.put("mark", car.getMark());
+        object.put("model", car.getModel());
+        object.put("nickname", car.getNickname());
+
+
+        return object.toString();
+
     }
 
 

@@ -1,5 +1,6 @@
 package lufa.alfaserwis.CarManagment.entity.carmanagement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -141,6 +142,7 @@ public class Car {
     @Column(name = "pic_path")
     private String carPicPath;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "car")
     @PrimaryKeyJoinColumn
     private CarAssignmentToGpsDevice gps;
@@ -152,13 +154,43 @@ public class Car {
     @Transient
     private boolean isNew = false;
 
-
-
-
-
-
     public Car() {
 
     }
 
+    @Override
+    public String toString() {
+        return "Car{" +
+                "regNumber='" + regNumber + '\'' +
+                ", mark='" + mark + '\'' +
+                ", model='" + model + '\'' +
+                ", color='" + color + '\'' +
+                ", fuelCardExpire='" + fuelCardExpire + '\'' +
+                ", city='" + city + '\'' +
+                ", user='" + user + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", fuelCard=" + fuelCard +
+                ", overviewDate='" + overviewDate + '\'' +
+                ", oilMillage=" + oilMillage +
+                ", totalMillage=" + totalMillage +
+                ", fuelType='" + fuelType + '\'' +
+                ", gasCylinderExpire='" + gasCylinderExpire + '\'' +
+                ", gasOverviewMillage=" + gasOverviewMillage +
+                ", firstRegDate='" + firstRegDate + '\'' +
+                ", insurer='" + insurer + '\'' +
+                ", OcDate='" + OcDate + '\'' +
+                ", OcCompany='" + OcCompany + '\'' +
+                ", AcCompany='" + AcCompany + '\'' +
+                ", assistant='" + assistant + '\'' +
+                ", VAT_1=" + VAT_1 +
+                ", summerTiresSize='" + summerTiresSize + '\'' +
+                ", winterTiresSize='" + winterTiresSize + '\'' +
+                ", tiresLocalization='" + tiresLocalization + '\'' +
+                ", equipment='" + equipment + '\'' +
+                ", other='" + other + '\'' +
+                ", oilDate='" + oilDate + '\'' +
+                ", gasOverviewDate='" + gasOverviewDate + '\'' +
+                ", overviewMillage=" + overviewMillage +
+                '}';
+    }
 }

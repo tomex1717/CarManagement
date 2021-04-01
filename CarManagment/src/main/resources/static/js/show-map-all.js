@@ -47,7 +47,12 @@ function initMap(listener) {
             let position = new google.maps.LatLng(
                 data[i].lat,
                 data[i].lng);
-            addMarker(position, data[i]);
+
+
+            getCarData(data[i].imei).then(car => {
+
+                addMarker(position, data[i], car);
+            });
 
 
         }
@@ -68,9 +73,19 @@ function initMap(listener) {
         let response = await fetch("/api/gps/latestpositionallcars");
         var data = await response.json();
         markCarsOnMap(data);
-        console.log(data);
+
 
     }
+
+    async function getCarData(imei) {
+
+        let response = await fetch("/api/gps/findcarbyassociatedimei?imei=" + imei);
+        let carData = await response.json();
+
+        return carData;
+
+    }
+
 
     function setMapOnAll(map) {
 
@@ -90,7 +105,8 @@ function initMap(listener) {
         markers = [];
     }
 
-    function addMarker(location, markerData) {
+
+    function addMarker(location, markerData, carData) {
         const marker = new google.maps.Marker({
             position: location,
             map: map,
@@ -102,9 +118,10 @@ function initMap(listener) {
             '<div id="siteNotice">' +
             '</div>' +
             '<div class="infowindow-header">Nr Rej.: </div>' + markerData.regNumber +
-            '<br>' + '<br>' +
-            '<div class="infowindow-header">Prędkość: </div>' + markerData.speed
-        ;
+            '<br>' +
+            '<div class="infowindow-header">Prędkość: </div>' + markerData.speed +
+            '<br>' +
+            '<div class="infowindow-header">Użytkownik: </div>' + carData.user;
 
 
         const infowindow = new google.maps.InfoWindow({
@@ -112,6 +129,8 @@ function initMap(listener) {
         });
 
         marker.addListener("click", () => {
+
+
             infowindow.open(map, marker);
         });
 

@@ -83,38 +83,7 @@ function initMap() {
                 var time = msToTime(timestamp);
 
 
-                // function geocode() {
-                //     for (let i= 0; i < startEndRoute.length; i++){
-                //         let result0;
-                //         // potrzebuje  poczekac az wykona ta petle i wypelni addresses[].
-                //         geocoder.geocode({location: startEndRoute[i]}, (results, status) => {
-                //             if (status === "OK") {
-                //                 if (results[0]) {
-                //                     // console.log(results[0]);
-                //                     //wypelnianie
-                //                     if(i<1) {
-                //                         result0 = results[0].formatted_address;
-                //                     }
-                //
-                //                     if (i === 1 ){
-                //                         infoWindow(result0,results[0].formatted_address);
-                //                     }
-                //
-                //                 } else {
-                //                     window.alert("No results found");
-                //                 }
-                //             } else {
-                //                 window.alert("Geocoder failed due to: " + status);
-                //             }
-                //
-                //         });
-                //     }
-                //
-                //
-                //
-                // }
-
-                function geocode() {
+            function geocode() {
                     var res0 = null
                     var res1 = null
                     geocoder.geocode({location: startEndRoute[0]}, (results, status) => {
