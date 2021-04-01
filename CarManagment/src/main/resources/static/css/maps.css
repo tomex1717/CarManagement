@@ -71,3 +71,9 @@
     font-weight: bolder;
     font-style: normal;
 }
+
+.infowindow-button {
+    margin-left: 15px;
+    padding-left: 5px;
+
+}

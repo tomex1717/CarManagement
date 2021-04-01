@@ -40,6 +40,7 @@ function initMap(listener) {
 
     function markCarsOnMap(data) {
         setMapOnAll(null);
+        var cacheMarkers = markers;
         markers = [];
 
         for (let i = 0; i < data.length; i++) {
@@ -50,50 +51,37 @@ function initMap(listener) {
 
 
             getCarData(data[i].imei).then(car => {
-
                 addMarker(position, data[i], car);
             });
-
-
         }
-
-
         setMapOnAll(map);
+
 
     }
 
 
     var intervalID = window.setInterval(getLatestPositionsAllCarsEvery5SecondsAndDrawPositions, 5000);
-
     markCarsOnMap(reportListAsJson);
 
-
     async function getLatestPositionsAllCarsEvery5SecondsAndDrawPositions() {
-
         let response = await fetch("/api/gps/latestpositionallcars");
         var data = await response.json();
         markCarsOnMap(data);
-
-
     }
 
     async function getCarData(imei) {
-
         let response = await fetch("/api/gps/findcarbyassociatedimei?imei=" + imei);
         let carData = await response.json();
-
         return carData;
-
     }
 
 
     function setMapOnAll(map) {
-
-
         for (let i = 0; i < markers.length; i++) {
             markers[i].setMap(map);
 
         }
+
     }
 
     function clearMarkers() {
@@ -106,53 +94,51 @@ function initMap(listener) {
     }
 
 
+    var openedInfoWindows = [];
     function addMarker(location, markerData, carData) {
         const marker = new google.maps.Marker({
             position: location,
             map: map,
-            title: markerData.regNumber,
             icon: car_icon,
         });
+
+        var aEdit = " <a href=/updatecar?regNumber=" + carData.regNumber +
+            " class=\"btn btn-info btn-sm card-edit-button infowindow-button\">" +
+            "            Dane\n" +
+            "            </a>";
+        var aRepairs = " <a href=/showrepairs?regNumber=" + carData.regNumber +
+            " class=\"btn btn-warning btn-sm card-edit-button infowindow-button\">" +
+            "            Napr." +
+            "            </a>";
+
 
         let toolTip = '<div id="map-box">' +
             '<div id="siteNotice">' +
             '</div>' +
-            '<div class="infowindow-header">Nr Rej.: </div>' + markerData.regNumber +
+            '<div class="infowindow-header">Nr Rej.: </div>' + carData.regNumber +
             '<br>' +
             '<div class="infowindow-header">Prędkość: </div>' + markerData.speed +
             '<br>' +
-            '<div class="infowindow-header">Użytkownik: </div>' + carData.user;
+            '<div class="infowindow-header">Użytkownik: </div>' + carData.user +
+            '<br>' +
+            '<div class="row" id="link-list">' +
+            aEdit +
+            aRepairs + '</div>';
 
 
         const infowindow = new google.maps.InfoWindow({
-            content: toolTip
+            content: toolTip,
+            regNumber: carData.regNumber,
+            minWidth: 150
         });
 
         marker.addListener("click", () => {
-
-
             infowindow.open(map, marker);
+            openedInfoWindows.push(infowindow);
         });
 
         markers.push(marker);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
