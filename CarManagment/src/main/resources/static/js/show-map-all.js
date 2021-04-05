@@ -115,7 +115,7 @@ function initMap(listener) {
 
         var aGpsHistory = " <a href=/gps/showmap?imei=" + markerData.imei + "&timestamp=" + timestamp +
             " class=\"btn btn-info btn-sm card-edit-button infowindow-button\">" +
-            "            GPS Historia" +
+            "            Trasy" +
             "            </a>";
 
 
