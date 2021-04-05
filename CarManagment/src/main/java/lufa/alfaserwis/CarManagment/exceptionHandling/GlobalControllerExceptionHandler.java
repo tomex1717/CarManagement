@@ -32,7 +32,7 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public String handleException(AccessDeniedException ex, Model model){
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("ex.getMessage()");
+        errorResponse.setMessage(ex.getMessage());
         errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
         errorResponse.setTimeStamp(System.currentTimeMillis());
         model.addAttribute("error", errorResponse);

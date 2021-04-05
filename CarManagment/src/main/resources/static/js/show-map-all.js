@@ -108,11 +108,16 @@ function initMap(listener) {
             "            Dane\n" +
             "            </a>";
 
-        var checkbox = document.createElement('input');
-        checkbox.type = "checkbox";
-        checkbox.name = "name" + "Follow on map?"
-        checkbox.value = "value";
-        checkbox.id = "checkboxid";
+        var now = new Date();
+        var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var timestamp = startOfDay.getTime();
+
+
+        var aGpsHistory = " <a href=/gps/showmap?imei=" + markerData.imei + "&timestamp=" + timestamp +
+            " class=\"btn btn-info btn-sm card-edit-button infowindow-button\">" +
+            "            GPS Historia" +
+            "            </a>";
+
 
         let toolTip = '<div id="map-box">' +
             '<div id="siteNotice">' +
@@ -124,10 +129,8 @@ function initMap(listener) {
             '<div class="infowindow-header">Użytkownik: </div>' + carData.user +
             '<br>' +
             '<div class="row" id="link-list">' +
-            aEdit + '<div id="checkbox">' + '</div> ' + '</div>';
+            aEdit + aGpsHistory + '</div> ' + '</div>';
 
-        // var checkBoxDiv = document.getElementById("checkbox")
-        // checkBoxDiv.appendChild(checkbox);
 
         const infowindow = new google.maps.InfoWindow({
             content: toolTip,
