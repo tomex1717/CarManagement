@@ -4,7 +4,7 @@ var reportListAsJson = JSON.parse(latestReportListAsJsonTl);
 var carPostitionMarker = "/images/carMarker.svg";
 
 var markers = [];
-
+var openedInfoWindowsOnMarkers = [];
 function initMap(listener) {
     var random = Math.floor(Math.random() * Math.floor(reportListAsJson.length - 1));
     map = new google.maps.Map(document.getElementById("map"), {
@@ -94,12 +94,13 @@ function initMap(listener) {
     }
 
 
-    var openedInfoWindows = [];
+
     function addMarker(location, markerData, carData) {
         const marker = new google.maps.Marker({
             position: location,
             map: map,
             icon: car_icon,
+            imei: markerData.imei
         });
 
         var aEdit = " <a href=/updatecar?regNumber=" + carData.regNumber +
@@ -132,9 +133,23 @@ function initMap(listener) {
             minWidth: 150
         });
 
+
+        for (let i = 0; i < openedInfoWindowsOnMarkers.length; i++) {
+            if (marker.imei === openedInfoWindowsOnMarkers[i].imei) {
+                infowindow.open(map, marker);
+            }
+
+        }
+
+
         marker.addListener("click", () => {
             infowindow.open(map, marker);
-            openedInfoWindows.push(infowindow);
+            openedInfoWindowsOnMarkers.push(marker);
+        });
+
+        google.maps.event.addListener(infowindow, 'closeclick', function () {
+            infowindow.close();
+            openedInfoWindowsOnMarkers = [];
         });
 
         markers.push(marker);
