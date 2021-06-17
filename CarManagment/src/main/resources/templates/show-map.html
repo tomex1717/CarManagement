@@ -22,11 +22,13 @@
             <div id="map"><h2 id="noReportsMessage"></h2></div>
 
 
-            <!--HOUR SLIDER BELOW MAPS-->
-            <div class="slidecontainer">
-                <input type="range" min="0" max="1439" value="0" class="slider" id="myRange">
+        </div>
+
+        <div class="row">
+            <div class="chart">
+                <canvas id="speedChart"></canvas>
             </div>
-            <label id="hourIndicator"></label>
+
 
         </div>
 
@@ -49,6 +51,7 @@
 <!--js scripts-->
 <script src="/js/show-map.js"></script>
 <script src="/js/datepicker.js" type="text/javascript" th:inline="javascript"></script>
+<script src="/js/route-charts.js"></script>
 
 <script async defer
         th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${apikey} + '&callback=initMap'"></script>

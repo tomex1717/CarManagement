@@ -222,11 +222,13 @@ public class ReportServiceImpl {
 
             if ((report.getRouteNumber().equals(cacheReport.getRouteNumber())) && (report.getRouteNumber() != 0)) {
                 routeArray.put(makeJsonObject(
-                        cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp()));
+                        cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp(),
+                        cacheReport.getSpeed()));
 
             } else {
                 routeArray.put(makeJsonObject(
-                        cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp()));
+                        cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp(),
+                        cacheReport.getSpeed()));
 
                 if (routeArray.length() > 1) {
                     allRoutes.put(routeArray);
@@ -241,7 +243,8 @@ public class ReportServiceImpl {
 
         if (!reportList.isEmpty()) {
             routeArray.put(makeJsonObject(
-                    cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp()));
+                    cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp(),
+                    cacheReport.getSpeed()));
             allRoutes.put(routeArray);
         }
         return allRoutes.toString();
@@ -285,11 +288,13 @@ public class ReportServiceImpl {
     }
 
 
-    private JSONObject makeJsonObject(double lng, double lat, long timestamp) {
+    private JSONObject makeJsonObject(double lng, double lat, long timestamp, double speed) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.putOpt("lng", lng);
         jsonObject.put("lat", lat);
         jsonObject.put("timestamp", timestamp);
+        jsonObject.put("speed", speed);
+
         return jsonObject;
     }
 

@@ -4,6 +4,7 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 0px;
+    /*padding-left: 10px;*/
     padding: 0;
 }
 
@@ -53,6 +54,7 @@
     color: #ff0000;
 }
 
+
 .ui-datepicker-today.ui-datepicker-current-day a.ui-state-highlight {
     border-color: #00ff00;
 
@@ -75,5 +77,24 @@
 .infowindow-button {
     margin-left: 15px;
     padding-left: 5px;
+
+}
+
+.chart {
+
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#speedChart {
+    margin-top: 30px;
+    height: 100px;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+}
+
+#datepicker {
+    margin-bottom: 10px;
 
 }

@@ -4,7 +4,7 @@ var directionsString = directionsStringTl;
 if (directionsStringTl) {
     document.getElementById("noReportsMessage").innerText = "Brak raportów dla danego dnia, wybierz inny dzień";
 }
-var jsonVar = JSON.parse(directionsString);
+var routesJson = JSON.parse(directionsString);
 
 var carPostitionMarker = "/images/carMarker.svg";
 
@@ -13,10 +13,10 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
 
         center: {
-            lat: jsonVar[(Object.keys(jsonVar).length - 1)][(Object.keys(jsonVar[(Object.keys(jsonVar).length - 1)]).length - 1)].lat,
-            lng: jsonVar[(Object.keys(jsonVar).length - 1)][(Object.keys(jsonVar[(Object.keys(jsonVar).length - 1)]).length - 1)].lng
+            lat: routesJson[(Object.keys(routesJson).length - 1)][(Object.keys(routesJson[(Object.keys(routesJson).length - 1)]).length - 1)].lat,
+            lng: routesJson[(Object.keys(routesJson).length - 1)][(Object.keys(routesJson[(Object.keys(routesJson).length - 1)]).length - 1)].lng
         },
-        zoom: 16
+        zoom: 13
     });
 
     //color palette for route drawing, explicit since random color sometimes were almost same
@@ -33,16 +33,16 @@ function initMap() {
 
     const geocoder = new google.maps.Geocoder();
 
-    for (let i = 0; i < Object.keys(jsonVar).length; i++) {
+    for (let i = 0; i < Object.keys(routesJson).length; i++) {
 
         var routePath = new google.maps.Polyline({
-            path: jsonVar[i],
+            path: routesJson[i],
 
             geodesic: true,
             // strokeColor: "#"+((1<<24)*Math.random()|0).toString(16),
             strokeColor: colorPalette[i],
             strokeOpacity: 1.0,
-            strokeWeight: 5,
+            strokeWeight: 2,
             icons: [{
                 icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW},
                 offset: '100%'
@@ -71,16 +71,16 @@ function initMap() {
 
 
         google.maps.event.addListener(routePath, 'click', function (event) {
-                var startRoute = jsonVar[i][0];
-                var endRoute = jsonVar[i][jsonVar[i].length - 1];
+            var startRoute = routesJson[i][0];
+            var endRoute = routesJson[i][routesJson[i].length - 1];
 
-                var startEndRoute = [startRoute, endRoute];
-                var addresses = [];
+            var startEndRoute = [startRoute, endRoute];
+            var addresses = [];
 
 
-                // convert millis difference between end and start to time (travel time)
-                var timestamp = endRoute.timestamp - startRoute.timestamp;
-                var time = msToTime(timestamp);
+            // convert millis difference between end and start to time (travel time)
+            var timestamp = endRoute.timestamp - startRoute.timestamp;
+            var time = msToTime(timestamp);
 
 
             function geocode() {
@@ -158,15 +158,15 @@ function initMap() {
         fillOpacity: 1,
 
         strokeWeight: 1,
-        scale: .10,
+        scale: .06,
         anchor: anchor
 
     };
 
     var positionMarker = new google.maps.Marker({
         position: new google.maps.LatLng(
-            (jsonVar[(Object.keys(jsonVar).length - 1)][(Object.keys(jsonVar[(Object.keys(jsonVar).length - 1)]).length - 1)].lat),
-            jsonVar[(Object.keys(jsonVar).length - 1)][(Object.keys(jsonVar[(Object.keys(jsonVar).length - 1)]).length - 1)].lng),
+            (routesJson[(Object.keys(routesJson).length - 1)][(Object.keys(routesJson[(Object.keys(routesJson).length - 1)]).length - 1)].lat),
+            routesJson[(Object.keys(routesJson).length - 1)][(Object.keys(routesJson[(Object.keys(routesJson).length - 1)]).length - 1)].lng),
         icon: car_icon,
 
         map: map
@@ -174,29 +174,12 @@ function initMap() {
 
     });
 
+
+    drawSpeedChart(routesJson);
+
 }
 
 
-//SLIDER UNDER MAP
-
-
-var slider = document.getElementById("myRange");
-var output = document.getElementById("hourIndicator");
-output.innerHTML = '00' + ':' + '00' // Display the default slider value
-
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function () {
-    var hours = Math.floor(slider.value / 60);
-    var minutes = slider.value - (hours * 60);
-
-    if (hours.toString().length == 1) hours = '0' + hours;
-    if (minutes.toString().length == 1) minutes = '0' + minutes;
-
-
-    output.innerHTML = hours + ':' + minutes;
-
-
-};
 
 
 
