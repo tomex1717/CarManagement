@@ -108,10 +108,6 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 }
 
 
-                in.close();
-                out.close();
-                clientSocket.close();
-                numberOfConnectedClients--;
                 reportService.writeToDb(this.gps, this.timestamp, this.imei);
 
 
@@ -119,6 +115,16 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 log.error(e.getMessage(), e);
                 numberOfConnectedClients--;
 
+            } finally {
+                try {
+                    in.close();
+                    out.close();
+                    clientSocket.close();
+                    numberOfConnectedClients--;
+                } catch (IOException e) {
+                    log.error("Error with closing streams form binary socket: ");
+                    log.error(e.getMessage());
+                }
             }
         }
 

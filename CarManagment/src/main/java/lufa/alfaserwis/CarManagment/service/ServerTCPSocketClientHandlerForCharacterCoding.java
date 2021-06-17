@@ -89,16 +89,19 @@ public class ServerTCPSocketClientHandlerForCharacterCoding implements Runnable 
 
                 }
 
-                in.close();
-                out.close();
-                clientSocket.close();
-                numberOfConnectedClients--;
-
-
             } catch (IOException e) {
                 e.printStackTrace();
                 numberOfConnectedClients--;
-
+            } finally {
+                try {
+                    in.close();
+                    out.close();
+                    clientSocket.close();
+                    numberOfConnectedClients--;
+                } catch (IOException e) {
+                    log.error("Error with closing streams form ascii socket: ");
+                    log.error(e.getMessage());
+                }
             }
         }
 
