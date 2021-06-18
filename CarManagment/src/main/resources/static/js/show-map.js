@@ -45,7 +45,8 @@ function initMap() {
             strokeWeight: 2,
             icons: [{
                 icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW},
-                offset: '100%'
+                offset: '100%',
+                repeat: '20px'
             }]
 
 
