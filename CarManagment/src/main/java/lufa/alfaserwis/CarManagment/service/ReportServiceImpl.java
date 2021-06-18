@@ -56,12 +56,11 @@ public class ReportServiceImpl {
         }
     }
 
-    public void writeToDb(GPSElementBinaryCoding gps, long timestamp, long imei) {
-        System.out.println(makeEntity(gps, timestamp, imei).toString());
-        reportRepository.save(makeEntity(gps, timestamp, imei));
+    public void writeToDb(GPSElementBinaryCoding gps, long timestamp, long imei, HashMap<Integer, Integer> allIOElements) {
+
+        reportRepository.save(makeEntity(gps, timestamp, imei, allIOElements));
 
     }
-
 
 
     private List<String> getReportAsList(String report) {
@@ -88,7 +87,8 @@ public class ReportServiceImpl {
         return report;
     }
 
-    private Report makeEntity(GPSElementBinaryCoding gps, long timestamp, long imei) {
+    private Report makeEntity(GPSElementBinaryCoding gps, long timestamp, long imei,
+                              HashMap<Integer, Integer> allIOElements) {
         Report report = new Report();
         report.setImei(imei);
         report.setTimestamp(timestamp);
@@ -97,6 +97,7 @@ public class ReportServiceImpl {
         report.setLongitude((double) gps.getLongitude());
         report.setSpeed(gps.getSpeed());
         report.setRegNumber("N/A");
+        report.setEngineRPM(0);
         return report;
     }
 

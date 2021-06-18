@@ -79,6 +79,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
         private long imei = 0;
         private GPSElementBinaryCoding gps = new GPSElementBinaryCoding();
         private long timestamp = 0;
+        private HashMap<Integer, Integer> allIOElements = new HashMap<>();
 
 
         // constructors
@@ -108,7 +109,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 }
 
 
-                reportService.writeToDb(this.gps, this.timestamp, this.imei);
+                reportService.writeToDb(this.gps, this.timestamp, this.imei, allIOElements);
 
 
             } catch (IOException e) {
@@ -394,6 +395,7 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                     int id = in.readUnsignedByte();
                     int value = in.readByte();
                     byte1IOElements.put(id, value);
+                    this.allIOElements.putIfAbsent(id, value);
                 }
 
                 return byte1IOElements;
@@ -412,9 +414,10 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
 
                 for (int i = 0; i < numberOfIOElementsByte2; i++) {
 
-                    int id = in.readByte();
-                    int value = in.readShort();
+                    int id = in.readUnsignedByte();
+                    int value = in.readUnsignedShort();
                     byte2IOElements.put(id, value);
+                    this.allIOElements.putIfAbsent(id, value);
 
                 }
                 return byte2IOElements;
@@ -432,9 +435,10 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 HashMap<Integer, Integer> byte4IOElements = new HashMap<>();
 
                 for (int i = 0; i < numberOfIOElementsByte4; i++) {
-                    int id = in.readByte();
+                    int id = in.readUnsignedByte();
                     int value = in.readInt();
                     byte4IOElements.put(id, value);
+                    this.allIOElements.putIfAbsent(id, value);
 
                 }
                 return byte4IOElements;
@@ -452,9 +456,10 @@ public class ServerTCPSocketClientHandlerForBinaryCoding implements Runnable {
                 HashMap<Integer, Integer> byte8IOElements = new HashMap<>();
 
                 for (int i = 0; i < numberOfIOElementsByte8; i++) {
-                    int id = in.readByte();
+                    int id = in.readUnsignedByte();
                     int value = (int) in.readLong();
                     byte8IOElements.put(id, value);
+                    this.allIOElements.putIfAbsent(id, value);
                 }
                 return byte8IOElements;
 

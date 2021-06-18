@@ -36,6 +36,9 @@ public class Report implements Serializable {
     @Column(name = "longitude")
     private Double longitude;
 
+    @Column(name = "engine_rpm")
+    private Integer engineRPM = 0;
+
 
     @Column(name = "timestamp")
     private Long timestamp;
