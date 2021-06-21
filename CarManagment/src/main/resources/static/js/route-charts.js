@@ -12,53 +12,59 @@ function makeDataForChart(routesJson) {
             let y = routesJson[i][j].speed;
             labels.push(x);
             dataY.push(y);
-            chartDataToReturn.push({x: x, y: y});
+            chartDataToReturn.push(routesJson[i][j]);
+
         }
     }
     return chartDataToReturn;
 }
 
+
 function drawSpeedChart(routesJson) {
     var chartData = makeDataForChart(routesJson);
 
-    // new Chart(
-    //     document.getElementById("speedChart"),
-    //     {
-    //         type: 'line',
-    //         data: chartData,
-    //         options: {
-    //             scales: {
-    //                 x: {
-    //                     type: 'linear',
-    //                     position: 'bottom'
-    //
-    //                 },
-    //                 y: {
-    //
-    //                    beginAtZero: true
-    //                 }
-    //             },
-    //             plugins:{
-    //
-    //             }
-    //
-    //         }
-    //     }
-    // );
-
-    new Chart(document.getElementById("speedChart"), {
+    var chart = new Chart(document.getElementById("speedChart"), {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [
                 {
                     label: "KM/H",
-                    backgroundColor: ["#3e95cd"],
+                    backgroundColor: ["#cd3e3e"],
                     data: dataY
                 }
             ]
         },
         options: {
+
+
+            onHover: function (e, item, test, test2) {
+
+                const canvasPosition = Chart.helpers.getRelativePosition(e, chart);
+
+                // Substitute the appropriate scale IDs
+                const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+
+
+                const latlng = {
+                    lat: chartData[dataX].lat,
+
+                    lng: chartData[dataX].lng,
+                };
+
+
+                map.setCenter(latlng);
+                // var positionMarker = new google.maps.Marker({
+                //     position: latlng,
+                //     icon: car_icon,
+                //
+                //     map: map
+                //
+                //
+                // });
+            },
+
+
             legend: {display: false},
             title: {
                 display: true,
@@ -67,9 +73,7 @@ function drawSpeedChart(routesJson) {
 
             },
             responsive: true,
-            // layout: {
-            //   padding: 40
-            // },
+
 
             plugins: {
                 title: {
