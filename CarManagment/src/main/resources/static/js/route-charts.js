@@ -1,9 +1,9 @@
 var labels = [];
 var dataY = [];
 var positionMarker;
-
+var engineRPM = [];
 var anchor = new google.maps.Point(150, 382);
-
+var chartData;
 
 function makeDataForChart(routesJson) {
     let chartDataToReturn = [];
@@ -14,8 +14,10 @@ function makeDataForChart(routesJson) {
             let date = new Date(routesJson[i][j].timestamp);
             let x = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + ":" + (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
             let y = routesJson[i][j].speed;
+            let rpm = routesJson[i][j].rpm;
             labels.push(x);
             dataY.push(y);
+            engineRPM.push(rpm);
             chartDataToReturn.push(routesJson[i][j]);
 
         }
@@ -37,7 +39,7 @@ var arrow_icon = {
 
 
 function drawSpeedChart(routesJson) {
-    var chartData = makeDataForChart(routesJson);
+    chartData = makeDataForChart(routesJson);
 
     var chart = new Chart(document.getElementById("speedChart"), {
         type: 'bar',
@@ -101,6 +103,94 @@ function drawSpeedChart(routesJson) {
                 title: {
                     display: true,
                     text: "Prędkość pojazdu"
+                },
+                zoom: {
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+
+                        mode: 'x',
+                    },
+
+                    pan: {
+                        mode: 'x',
+                        enabled: true
+                    },
+                }
+            }
+        }
+    });
+}
+
+
+function drawEngineRPMChart() {
+
+    var chart = new Chart(document.getElementById("rpmChart"), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "RPM",
+                    backgroundColor: ["#cd3e3e"],
+                    data: engineRPM
+                }
+            ]
+        },
+        options: {
+
+
+            onHover: function (e) {
+
+                const canvasPosition = Chart.helpers.getRelativePosition(e, chart);
+
+                // Substitute the appropriate scale IDs
+                const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+
+
+                const latlng = {
+                    lat: chartData[dataX].lat,
+
+                    lng: chartData[dataX].lng,
+                };
+
+
+                map.setCenter(latlng);
+                if (positionMarker !== undefined) {
+                    positionMarker.setMap(null);
+                }
+
+                positionMarker = new google.maps.Marker({
+                    position: latlng,
+                    icon: arrow_icon,
+
+                    map: map
+
+
+                });
+                positionMarker.setMap(map);
+            },
+
+
+            legend: {display: false},
+            title: {
+                display: true,
+                text: 'Obroty silnika',
+
+
+            },
+            maintainAspectRatio: false,
+            responsive: true,
+
+
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Obroty silnika"
                 },
                 zoom: {
                     zoom: {

@@ -97,7 +97,9 @@ public class ReportServiceImpl {
         report.setLongitude((double) gps.getLongitude());
         report.setSpeed(gps.getSpeed());
         report.setRegNumber("N/A");
-        report.setEngineRPM(0);
+        report.setEngineRPM(allIOElements.getOrDefault(36, 0));
+
+
         return report;
     }
 
@@ -224,12 +226,12 @@ public class ReportServiceImpl {
             if ((report.getRouteNumber().equals(cacheReport.getRouteNumber())) && (report.getRouteNumber() != 0)) {
                 routeArray.put(makeJsonObject(
                         cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp(),
-                        cacheReport.getSpeed()));
+                        cacheReport.getSpeed(), cacheReport.getEngineRPM()));
 
             } else {
                 routeArray.put(makeJsonObject(
                         cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp(),
-                        cacheReport.getSpeed()));
+                        cacheReport.getSpeed(), cacheReport.getEngineRPM()));
 
                 if (routeArray.length() > 1) {
                     allRoutes.put(routeArray);
@@ -245,7 +247,7 @@ public class ReportServiceImpl {
         if (!reportList.isEmpty()) {
             routeArray.put(makeJsonObject(
                     cacheReport.getLongitude(), cacheReport.getLatitude(), cacheReport.getTimestamp(),
-                    cacheReport.getSpeed()));
+                    cacheReport.getSpeed(), cacheReport.getEngineRPM()));
             allRoutes.put(routeArray);
         }
         return allRoutes.toString();
@@ -289,12 +291,13 @@ public class ReportServiceImpl {
     }
 
 
-    private JSONObject makeJsonObject(double lng, double lat, long timestamp, double speed) {
+    private JSONObject makeJsonObject(double lng, double lat, long timestamp, double speed, int rpm) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.putOpt("lng", lng);
         jsonObject.put("lat", lat);
         jsonObject.put("timestamp", timestamp);
         jsonObject.put("speed", speed);
+        jsonObject.put("rpm", rpm);
 
         return jsonObject;
     }
