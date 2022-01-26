@@ -368,7 +368,7 @@ public class ReportServiceImpl {
         }
 
 
-        throw new NoSuchElementException();
+        throw new NoSuchElementException("No gps associated with imei number " + imei);
 
     }
 
